@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Font families */
+  --font-sans: 'Inter', 'Noto Sans Ethiopic', sans-serif;
+  --font-ethiopic: 'Noto Sans Ethiopic', sans-serif;
+
+  /* Primary colors */
+  --color-primary-50: #E8EEFF;
+  --color-primary-100: #D0DDFF;
+  --color-primary-200: #A1BBFF;
+  --color-primary-300: #7299FF;
+  --color-primary-400: #3A73F0;
+  --color-primary: #074DD9;
+  --color-primary-500: #074DD9;
+  --color-primary-600: #063EAE;
+  --color-primary-700: #042E82;
+  --color-primary-800: #031F57;
+  --color-primary-900: #010F2B;
+
+  /* Secondary colors */
+  --color-secondary-50: #E6FEFF;
+  --color-secondary-100: #CCFDFF;
+  --color-secondary-200: #99FAFF;
+  --color-secondary-300: #66F5FF;
+  --color-secondary-400: #33EDFF;
+  --color-secondary: #00E5FF;
+  --color-secondary-500: #00E5FF;
+  --color-secondary-600: #00B8CC;
+  --color-secondary-700: #008A99;
+
+  /* Surface colors */
+  --color-surface: #0B132B;
+  --color-surface-light: #F5F7FB;
+  --color-surface-dark: #0B132B;
+
+  /* Animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-slide-up: slideUp 0.6s ease-out;
+  --animate-slide-down: slideDown 0.4s ease-out;
+  --animate-fade-in: fadeIn 0.6s ease-out;
+  --animate-count-up: fadeIn 0.3s ease-out;
+
+  /* Keyframes */
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 20px rgba(7, 77, 217, 0.2);
+    }
+
+    to {
+      box-shadow: 0 0 40px rgba(7, 77, 217, 0.4);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}

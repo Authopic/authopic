@@ -1,0 +1,18 @@
+{
+  "name": "authopic-technologies",
+  "version": "1.0.0",
+  "description": "Full-stack dynamic website for **Authopic Technologies PLC**, a software solutions company based in Addis Ababa, Ethiopia. Built with procedural PHP, MySQL, Tailwind CSS, and vanilla JavaScript.",
+  "main": "sw.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./assets/css/app.css -o ./assets/css/tailwind.css --content \"./**/*.php\" --minify",
+    "dev:css": "tailwindcss -i ./assets/css/app.css -o ./assets/css/tailwind.css --content \"./**/*.php\" --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.0",
+    "tailwindcss": "^4.2.0"
+  }
+}
