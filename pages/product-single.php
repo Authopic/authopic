@@ -101,75 +101,103 @@ require_once BASE_PATH . '/includes/header.php';
         <?php if ($product['type'] === 'sms'): ?>
         <div class="feature-tabs" data-animate="slide-up">
             <div class="flex flex-wrap justify-center gap-2 mb-8">
-                <button class="tab-btn active px-6 py-3 rounded-xl text-sm font-medium border border-black/5 dark:border-white/10 transition-all" data-tab="administrators"><?php echo get_text('For Administrators', 'ለአስተዳዳሪዎች'); ?></button>
+                <button class="tab-btn active px-6 py-3 rounded-xl text-sm font-medium border border-black/5 dark:border-white/10 transition-all" data-tab="administrators"><?php echo get_text('For Principals', 'ለርዕሰ መምህራን'); ?></button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-sm font-medium border border-black/5 dark:border-white/10 transition-all" data-tab="finance"><?php echo get_text('For Finance', 'ለፋይናንስ'); ?></button>
                 <button class="tab-btn px-6 py-3 rounded-xl text-sm font-medium border border-black/5 dark:border-white/10 transition-all" data-tab="teachers"><?php echo get_text('For Teachers', 'ለመምህራን'); ?></button>
                 <button class="tab-btn px-6 py-3 rounded-xl text-sm font-medium border border-black/5 dark:border-white/10 transition-all" data-tab="parents"><?php echo get_text('For Parents', 'ለወላጆች'); ?></button>
-                <button class="tab-btn px-6 py-3 rounded-xl text-sm font-medium border border-black/5 dark:border-white/10 transition-all" data-tab="accountants"><?php echo get_text('For Accountants', 'ለሂሳብ ሠራተኞች'); ?></button>
+                <button class="tab-btn px-6 py-3 rounded-xl text-sm font-medium border border-black/5 dark:border-white/10 transition-all" data-tab="students"><?php echo get_text('For Students', 'ለተማሪዎች'); ?></button>
             </div>
-            
+
+            <!-- Principals Tab -->
             <div class="tab-content active" id="tab-administrators">
                 <div class="grid lg:grid-cols-2 gap-8 items-center">
                     <div class="aspect-video bg-primary/10 rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden cursor-pointer" onclick="openLightbox(this.querySelector('img').src)">
-                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Screenshot 2026-02-27 at 14-47-42 Dashboard —.png')); ?>" alt="School Management System - Admin Dashboard" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('dashboard.png')); ?>" alt="School Management System - Admin Dashboard" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Complete School Dashboard', 'ሙሉ የትምህርት ቤት ዳሽቦርድ'); ?></h3>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Run Your School Smarter, Not Harder', 'ትምህርት ቤትዎን ብልህ ሁን'); ?></h3>
                         <ul class="space-y-3">
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Real-time student enrollment and attendance overview</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Financial summaries and fee collection reports</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Staff management and payroll integration</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Ministry of Education compliance reports</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">See your school's full picture — students enrolled, money collected, staff attendance — all on one screen the moment you log in</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Know exactly how much fee revenue is coming in and who hasn't paid yet</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Make announcements to the whole school, specific classes, or just teachers — instantly</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Keep your school's data safe with one-click database backups</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Full control over who can access what — no more unauthorized changes</span></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- Finance Tab -->
+            <div class="tab-content hidden" id="tab-finance">
+                <div class="grid lg:grid-cols-2 gap-8 items-center">
+                    <div class="aspect-video bg-amber-500/10 rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden cursor-pointer" onclick="openLightbox(this.querySelector('img').src)">
+                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Collect Payment.png')); ?>" alt="School Management System - Finance" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Stop Chasing Payments', 'ክፍያ ማሳደድ ያቁሙ'); ?></h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Create fee structures once — system automatically charges students monthly, termly, or yearly</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Accept payments in cash, bank transfer, or online via Telebirr and Chapa</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Automatically apply late payment penalties — no manual calculations needed</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Print professional invoices and receipts in seconds</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Generate full financial reports to know exactly where your school stands</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teachers Tab -->
             <div class="tab-content hidden" id="tab-teachers">
                 <div class="grid lg:grid-cols-2 gap-8 items-center">
                     <div class="aspect-video bg-secondary/10 rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden cursor-pointer" onclick="openLightbox(this.querySelector('img').src)">
-                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Screenshot 2026-02-27 at 14-50-25 Dashboard —.png')); ?>" alt="School Management System - Teacher Dashboard" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Take Attendance.png')); ?>" alt="School Management System - Teacher Dashboard" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Teacher Dashboard', 'የመምህር ዳሽቦርድ'); ?></h3>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Spend Less Time on Admin, More Time Teaching', 'ባነሰ ጊዜ ያስተዳድሩ'); ?></h3>
                         <ul class="space-y-3">
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Easy grade entry with bulk upload support</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">One-click attendance tracking per class</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Direct messaging to parents</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Lesson planning and timetable management</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Take class attendance in under 2 minutes with a simple tap/click interface</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Enter student marks — system automatically calculates grades, GPA, and class rank</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Generate beautiful print-ready report cards with one click — no more hand-writing results</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Post assignments and track which students have submitted</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">View your weekly teaching timetable anytime, anywhere</span></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- Parents Tab -->
             <div class="tab-content hidden" id="tab-parents">
                 <div class="grid lg:grid-cols-2 gap-8 items-center">
                     <div class="aspect-video bg-green-500/10 rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden cursor-pointer" onclick="openLightbox(this.querySelector('img').src)">
-                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Screenshot 2026-02-27 at 14-53-54 Dashboard —.png')); ?>" alt="School Management System - Parent Portal" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Student Profile.png')); ?>" alt="School Management System - Parent Portal" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Parent Portal', 'የወላጅ ፖርታል'); ?></h3>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Always Know How Your Child Is Doing', 'ልጅዎ እንዴት እንደሚሄድ ሁሌ ይወቁ'); ?></h3>
                         <ul class="space-y-3">
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Live grades and progress tracking</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Online fee payment via mobile money</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Attendance notifications via SMS</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Direct communication with teachers</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Check your child's grades and exam results the moment they're released</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">See your child's attendance record — know if they were present, late, or absent every single day</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">View and pay school fees online using Telebirr or Chapa — no need to come to school</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Receive important school announcements directly through the system</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Message your child's teacher directly when you need to</span></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            
-            <div class="tab-content hidden" id="tab-accountants">
+
+            <!-- Students Tab -->
+            <div class="tab-content hidden" id="tab-students">
                 <div class="grid lg:grid-cols-2 gap-8 items-center">
-                    <div class="aspect-video bg-amber-500/10 rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden cursor-pointer" onclick="openLightbox(this.querySelector('img').src)">
-                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Screenshot 2026-02-27 at 14-56-52 Invoice INV-2025-0001 —.png')); ?>" alt="School Management System - Financial Dashboard" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
+                    <div class="aspect-video bg-purple-500/10 rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden cursor-pointer" onclick="openLightbox(this.querySelector('img').src)">
+                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Student Report Card.png')); ?>" alt="School Management System - Student Portal" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy">
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Financial Management', 'የፋይናንስ አስተዳደር'); ?></h3>
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4"><?php echo get_text('Everything for School — On Your Phone', 'ለትምህርት ቤት ሁሉ — በስልክዎ'); ?></h3>
                         <ul class="space-y-3">
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Automated fee calculation and invoicing</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Expense tracking and budget management</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Receipt generation and payment history</span></li>
-                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Financial reports and analytics</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">View your grades and report cards anytime</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">See your attendance history and know where you stand</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Check your fee balance and pay online without visiting the school office</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Receive assignments from teachers and submit your work digitally</span></li>
+                            <li class="flex items-start gap-3"><svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-slate-600 dark:text-gray-300">Chat and message with classmates and teachers</span></li>
                         </ul>
                     </div>
                 </div>
@@ -264,17 +292,18 @@ require_once BASE_PATH . '/includes/header.php';
         
         <?php
         $sms_screenshots = [
-            ['file' => 'Screenshot 2026-02-27 at 14-47-42 Dashboard —.png', 'caption_en' => 'Main Dashboard Overview', 'caption_am' => 'ዋና ዳሽቦርድ አጠቃላይ እይታ'],
-            ['file' => 'Screenshot 2026-02-27 at 14-48-08 Dashboard —.png', 'caption_en' => 'Dashboard Analytics', 'caption_am' => 'የዳሽቦርድ ትንተና'],
-            ['file' => 'Screenshot 2026-02-27 at 14-50-25 Dashboard —.png', 'caption_en' => 'Teacher Dashboard', 'caption_am' => 'የመምህር ዳሽቦርድ'],
-            ['file' => 'Screenshot 2026-02-27 at 14-52-53 Dashboard —.png', 'caption_en' => 'Attendance Tracking', 'caption_am' => 'የመገኘት ክትትል'],
-            ['file' => 'Screenshot 2026-02-27 at 14-53-54 Dashboard —.png', 'caption_en' => 'Parent Portal', 'caption_am' => 'የወላጅ ፖርታል'],
-            ['file' => 'Screenshot 2026-02-27 at 14-54-29 Dashboard —.png', 'caption_en' => 'Reports & Analytics', 'caption_am' => 'ሪፖርቶች እና ትንተና'],
-            ['file' => 'Screenshot 2026-02-27 at 14-55-02 Dashboard —.png', 'caption_en' => 'Fee Management', 'caption_am' => 'የክፍያ አስተዳደር'],
-            ['file' => 'Screenshot 2026-02-27 at 14-55-32 Dashboard —.png', 'caption_en' => 'Communication Portal', 'caption_am' => 'የግንኙነት ፖርታል'],
-            ['file' => 'Screenshot 2026-02-27 at 14-56-19 Dashboard —.png', 'caption_en' => 'Settings & Configuration', 'caption_am' => 'ቅንብሮች እና ውቅር'],
-            ['file' => 'Screenshot 2026-02-27 at 14-56-41 Dashboard —.png', 'caption_en' => 'User Management', 'caption_am' => 'የተጠቃሚ አስተዳደር'],
-            ['file' => 'Screenshot 2026-02-27 at 14-56-52 Invoice INV-2025-0001 —.png', 'caption_en' => 'Invoice Generation', 'caption_am' => 'ደረሰኝ ማመንጨት'],
+            ['file' => 'dashboard.png', 'caption_en' => 'Main Dashboard', 'caption_am' => 'ዋና ዳሽቦርድ'],
+            ['file' => 'dark Dashboard.png', 'caption_en' => 'Dark Mode Dashboard', 'caption_am' => 'ጨለማ ሁነታ ዳሽቦርድ'],
+            ['file' => 'Student Admission.png', 'caption_en' => 'Student Admission', 'caption_am' => 'የተማሪ ምዝገባ'],
+            ['file' => 'Student Profile.png', 'caption_en' => 'Student Profile', 'caption_am' => 'የተማሪ መገለጫ'],
+            ['file' => 'Take Attendance.png', 'caption_en' => 'Take Attendance', 'caption_am' => 'መገኘት ይመዝግቡ'],
+            ['file' => 'Attendance Report.png', 'caption_en' => 'Attendance Report', 'caption_am' => 'የመገኘት ሪፖርት'],
+            ['file' => 'Result Analysis.png', 'caption_en' => 'Result Analysis', 'caption_am' => 'የውጤት ትንተና'],
+            ['file' => 'Student Report Card.png', 'caption_en' => 'Student Report Card', 'caption_am' => 'የተማሪ ሪፖርት ካርድ'],
+            ['file' => 'Collect Payment.png', 'caption_en' => 'Collect Payment', 'caption_am' => 'ክፍያ ሰብስብ'],
+            ['file' => 'Payment Summary.png', 'caption_en' => 'Payment Summary', 'caption_am' => 'የክፍያ ማጠቃለያ'],
+            ['file' => 'Messaging.png', 'caption_en' => 'Messaging & Communication', 'caption_am' => 'መልዕክት እና ግንኙነት'],
+            ['file' => 'HR Reports Dashboard.png', 'caption_en' => 'HR Reports', 'caption_am' => 'የሰው ሃይል ሪፖርቶች'],
         ];
         ?>
         

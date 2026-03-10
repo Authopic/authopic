@@ -1,7 +1,3 @@
--- ============================================
--- Authopic Technologies PLC - Sample Data / Seed Data
--- ============================================
-USE `authopic_db`;
 
 -- ============================================
 -- Default Admin User (password: Admin@2026!)

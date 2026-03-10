@@ -10,12 +10,6 @@ START TRANSACTION;
 SET time_zone = "+03:00"; -- East Africa Time
 
 -- ============================================
--- CREATE DATABASE
--- ============================================
-CREATE DATABASE IF NOT EXISTS `authopic_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `authopic_db`;
-
--- ============================================
 -- TABLE: admin_users
 -- ============================================
 CREATE TABLE `admin_users` (

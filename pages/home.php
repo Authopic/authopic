@@ -73,12 +73,12 @@ require_once BASE_PATH . '/includes/header.php';
                     <!-- Main SMS Dashboard Screenshot -->
                     <div class="w-[500px] relative">
                         <div class="rounded-2xl border border-black/5 dark:border-white/10 shadow-2xl overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-500">
-                            <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Screenshot 2026-02-27 at 14-47-42 Dashboard —.png')); ?>" alt="School Management System Dashboard" class="w-full h-auto" loading="eager">
+                            <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('dashboard.png')); ?>" alt="School Management System Dashboard" class="w-full h-auto" loading="eager">
                         </div>
                         
                         <!-- Secondary screenshot peek -->
                         <div class="absolute -bottom-6 -left-6 w-48 rounded-xl border border-black/5 dark:border-white/10 shadow-xl overflow-hidden transform -rotate-3 hover:rotate-0 transition-transform duration-500">
-                            <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Screenshot 2026-02-27 at 14-56-52 Invoice INV-2025-0001 —.png')); ?>" alt="SMS Invoice" class="w-full h-auto" loading="eager">
+                            <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Collect Payment.png')); ?>" alt="SMS Collect Payment" class="w-full h-auto" loading="eager">
                         </div>
                         
                         <!-- Floating badge -->
@@ -176,7 +176,7 @@ endfor; ?>
                     <!-- Product screenshot preview -->
                     <?php if ($product['type'] === 'sms'): ?>
                     <div class="mb-6 rounded-xl overflow-hidden border border-black/5 dark:border-white/5 shadow-sm">
-                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('Screenshot 2026-02-27 at 14-48-08 Dashboard —.png')); ?>" alt="School Management System Preview" class="w-full h-40 object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                        <img src="<?php echo asset('img/school_mgt_syst/' . rawurlencode('dark Dashboard.png')); ?>" alt="School Management System Preview" class="w-full h-40 object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy">
                     </div>
                     <?php
     endif; ?>
