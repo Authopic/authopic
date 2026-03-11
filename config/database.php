@@ -12,11 +12,11 @@ if (!defined('BASE_PATH')) {
 }
 
 // ============================================
-// Load .env file
+// Load .env files (.env, then .env.production overrides)
 // ============================================
-$_env_file = BASE_PATH . '/.env';
-if (file_exists($_env_file)) {
-    $lines = file($_env_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+function _load_env_file($path) {
+    if (!file_exists($path)) return;
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $_line) {
         $_line = trim($_line);
         if ($_line === '' || $_line[0] === '#') continue;
@@ -35,14 +35,13 @@ if (file_exists($_env_file)) {
                 $_val = substr($_val, 1, -1);
             }
         }
-        if (!isset($_ENV[$_key])) {
-            $_ENV[$_key] = $_val;
-            putenv("$_key=$_val");
-        }
+        // Always override — later files win
+        $_ENV[$_key] = $_val;
+        putenv("$_key=$_val");
     }
-    unset($lines, $_line, $_key, $_val, $_f, $_l, $p);
 }
-unset($_env_file);
+_load_env_file(BASE_PATH . '/.env');
+_load_env_file(BASE_PATH . '/.env.production');
 
 /**
  * Read a value from the loaded .env / server environment.

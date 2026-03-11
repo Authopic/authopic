@@ -4,6 +4,28 @@
  */
 if (!defined('BASE_PATH')) exit;
 
+// ---- TEST EMAIL ----
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && post('action') === 'test_email') {
+    if (!csrf_verify(post('csrf_token'))) { set_flash('error', 'Invalid token.'); redirect('/admin/settings'); }
+    $test_to = trim(post('test_to') ?: '');
+    if (!$test_to || !filter_var($test_to, FILTER_VALIDATE_EMAIL)) {
+        set_flash('error', 'Please enter a valid email address to send the test to.');
+        redirect('/admin/settings');
+    }
+    $site_name = get_setting('site_name', 'Authopic Technologies PLC');
+    $html = email_template('SMTP Test Email', "<p>This is a test email sent from <strong>$site_name</strong> admin panel.</p>"
+        . "<p>If you received this, your SMTP configuration is working correctly.</p>"
+        . "<p style='font-size:12px;color:#94a3b8;margin-top:16px;'>Sent: " . date('Y-m-d H:i:s') . " UTC</p>"
+        . "<p style='font-size:12px;color:#94a3b8;'>Host: " . htmlspecialchars(MAIL_HOST, ENT_QUOTES) . ":" . MAIL_PORT . " / User: " . htmlspecialchars(MAIL_USER, ENT_QUOTES) . "</p>");
+    $ok = send_email($test_to, 'SMTP Test — ' . $site_name, $html);
+    if ($ok) {
+        set_flash('success', "Test email sent to $test_to — check your inbox (and spam folder).");
+    } else {
+        set_flash('error', 'SMTP send failed. Check your PHP error log for details (search for [SMTP]).');
+    }
+    redirect('/admin/settings');
+}
+
 // ---- SAVE ----
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_verify(post('csrf_token'))) { set_flash('error', 'Invalid token.'); redirect('/admin/settings'); }
@@ -152,3 +174,18 @@ $sv = function($key) use ($s) { return $s[$key] ?? ''; };
         </button>
     </div>
 </form>
+
+<!-- SMTP Test Card -->
+<div class="max-w-4xl mt-6 bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl p-6">
+    <h3 class="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-1">Test SMTP Email</h3>
+    <p class="text-xs text-slate-500 mb-4">Sends a real test email using your current SMTP config (<strong><?php echo e(MAIL_ENABLED ? 'Enabled' : 'DISABLED'); ?></strong> — <?php echo e(MAIL_HOST); ?>:<?php echo e(MAIL_PORT); ?> / <?php echo e(MAIL_USER ?: 'no user set'); ?>).</p>
+    <form method="POST" class="flex items-center gap-3 flex-wrap">
+        <?php echo csrf_field(); ?>
+        <input type="hidden" name="action" value="test_email">
+        <input type="email" name="test_to" required placeholder="recipient@example.com"
+               class="form-input !py-2 text-sm w-64" value="<?php echo e($sv('site_email')); ?>">
+        <button type="submit" class="px-5 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-semibold rounded-xl transition-colors">
+            Send Test Email
+        </button>
+    </form>
+</div>

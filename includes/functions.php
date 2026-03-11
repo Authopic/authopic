@@ -663,19 +663,31 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     $pass       = MAIL_PASS;
     $enc        = strtolower(MAIL_ENCRYPTION); // 'tls', 'ssl', or ''
 
-    // Open TCP connection
-    $prefix = ($enc === 'ssl') ? 'ssl://' : '';
-    $socket = @fsockopen($prefix . $host, $port, $errno, $errstr, 15);
+    // SSL context — disables peer verification which is required for most
+    // cPanel servers where the cert CN doesn't match the mail hostname.
+    $ssl_ctx = stream_context_create([
+        'ssl' => [
+            'verify_peer'       => false,
+            'verify_peer_name'  => false,
+            'allow_self_signed' => true,
+        ],
+    ]);
+
+    // For SSL (port 465) wrap the connection in SSL from the start.
+    // For STARTTLS (port 587) open a plain connection first.
+    $remote = ($enc === 'ssl') ? "ssl://$host:$port" : "tcp://$host:$port";
+    $socket = @stream_socket_client($remote, $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $ssl_ctx);
     if (!$socket) {
-        error_log("[SMTP] Connect failed to $host:$port — $errstr ($errno)");
+        error_log("[SMTP] Connect failed to $remote — $errstr ($errno)");
         return false;
     }
+    stream_set_timeout($socket, 15);
 
     $read = function() use ($socket) {
         $data = '';
         while ($line = fgets($socket, 512)) {
             $data .= $line;
-            if (substr($line, 3, 1) === ' ') break;
+            if (strlen($line) >= 4 && $line[3] === ' ') break;
         }
         return $data;
     };
@@ -684,19 +696,27 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     };
 
     $read(); // 220 greeting
-    $write('EHLO ' . (gethostname() ?: 'localhost'));
+    $ehlo = gethostname() ?: 'localhost';
+    $write("EHLO $ehlo");
     $read();
 
     // Upgrade to TLS for STARTTLS connections (port 587)
     if ($enc === 'tls') {
         $write('STARTTLS');
         $read();
-        if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+        // Apply the same permissive SSL context when upgrading
+        stream_context_set_option($socket, 'ssl', 'verify_peer',       false);
+        stream_context_set_option($socket, 'ssl', 'verify_peer_name',  false);
+        stream_context_set_option($socket, 'ssl', 'allow_self_signed', true);
+        $crypto = STREAM_CRYPTO_METHOD_TLS_CLIENT
+                | (defined('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT') ? STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT : 0)
+                | (defined('STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT') ? STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT : 0);
+        if (!stream_socket_enable_crypto($socket, true, $crypto)) {
             error_log('[SMTP] STARTTLS failed');
             fclose($socket);
             return false;
         }
-        $write('EHLO ' . (gethostname() ?: 'localhost'));
+        $write("EHLO $ehlo");
         $read();
     }
 
@@ -714,24 +734,37 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     }
 
     // Envelope
+    $rcpt_resp = '';
     $write("MAIL FROM:<$from_email>"); $read();
-    $write("RCPT TO:<$to>");           $read();
-    $write('DATA');                    $read();
+    $write("RCPT TO:<$to>");  $rcpt_resp = $read();
+    if ($rcpt_resp && $rcpt_resp[0] >= '4') {
+        error_log('[SMTP] RCPT TO rejected: ' . trim($rcpt_resp));
+        fclose($socket);
+        return false;
+    }
+    $write('DATA'); $read();
 
     // Headers + body
     $enc_name    = '=?UTF-8?B?' . base64_encode($from_name) . '?=';
     $enc_subject = '=?UTF-8?B?' . base64_encode($subject)   . '?=';
+    $boundary    = '----=_Part_' . md5(uniqid());
     $msg  = "From: $enc_name <$from_email>\r\n";
     $msg .= "To: <$to>\r\n";
     $msg .= "Subject: $enc_subject\r\n";
     $msg .= "MIME-Version: 1.0\r\n";
     $msg .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $msg .= "Content-Transfer-Encoding: base64\r\n";
     $msg .= "\r\n";
-    // Escape lone dots per SMTP spec
-    $msg .= preg_replace('/^\./m', '..', $html_body);
+    // base64-encode body to avoid dot-stuffing issues with HTML
+    $msg .= chunk_split(base64_encode($html_body));
     $msg .= "\r\n.";
-    $write($msg);
-    $read();
+    fputs($socket, $msg . "\r\n");
+    $data_resp = $read();
+    if ($data_resp && $data_resp[0] >= '4') {
+        error_log('[SMTP] DATA rejected: ' . trim($data_resp));
+        fclose($socket);
+        return false;
+    }
 
     $write('QUIT');
     fclose($socket);
