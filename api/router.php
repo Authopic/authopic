@@ -9,7 +9,7 @@ if (!defined('BASE_PATH')) exit;
 
 header('Content-Type: application/json; charset=utf-8');
 
-$api_path = isset($route_params['path']) ? $route_params['path'] : '';
+$api_path = isset($route_params['endpoint']) ? $route_params['endpoint'] : (isset($route_params['path']) ? $route_params['path'] : '');
 $method = $_SERVER['REQUEST_METHOD'];
 
 // ---- Newsletter Subscribe ----
