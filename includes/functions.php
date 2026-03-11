@@ -761,13 +761,18 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     // Headers + body
     $enc_name    = '=?UTF-8?B?' . base64_encode($from_name) . '?=';
     $enc_subject = '=?UTF-8?B?' . base64_encode($subject)   . '?=';
-    $boundary    = '----=_Part_' . md5(uniqid());
-    $msg  = "From: $enc_name <$from_email>\r\n";
+    $message_id  = '<' . time() . '.' . md5(uniqid('', true)) . '@' . $host . '>';
+    $date        = date('r'); // RFC 2822 date
+    $msg  = "Date: $date\r\n";
+    $msg .= "Message-ID: $message_id\r\n";
+    $msg .= "From: $enc_name <$from_email>\r\n";
     $msg .= "To: <$to>\r\n";
+    $msg .= "Reply-To: <$from_email>\r\n";
     $msg .= "Subject: $enc_subject\r\n";
     $msg .= "MIME-Version: 1.0\r\n";
     $msg .= "Content-Type: text/html; charset=UTF-8\r\n";
     $msg .= "Content-Transfer-Encoding: base64\r\n";
+    $msg .= "X-Mailer: PHP/" . PHP_VERSION . "\r\n";
     $msg .= "\r\n";
     // base64-encode body to avoid dot-stuffing issues with HTML
     $msg .= chunk_split(base64_encode($html_body));
