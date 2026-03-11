@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $subject = db_escape($subject);
             $message_esc = db_escape($message);
 
-            db_query("INSERT INTO `leads` (`name`, `email`, `phone`, `company`, `subject`, `message`, `source`, `created_at`) 
-                VALUES ('$name', '$email_esc', '$phone', '$company', '$subject', '$message_esc', 'contact-form', NOW())");
+            db_query("INSERT INTO `leads` (`name`, `email`, `phone`, `company`, `message`, `source`, `created_at`) 
+                VALUES ('$name', '$email_esc', '$phone', '$company', '$message_esc', 'contact-form', NOW())");
 
             notify_admin('New Contact Form Submission', "Name: $name\nEmail: $email\nPhone: $phone\nCompany: $company\nSubject: $subject\nMessage: $message");
             
