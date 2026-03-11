@@ -43,13 +43,13 @@ if ($action === 'view' && $id > 0):
 
     <div class="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl p-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div><span class="text-xs font-semibold text-slate-400 uppercase">Name</span><p class="font-semibold text-slate-800 dark:text-white"><?php echo e($demo['name']); ?></p></div>
+            <div><span class="text-xs font-semibold text-slate-400 uppercase">Name</span><p class="font-semibold text-slate-800 dark:text-white"><?php echo e(trim($demo['first_name'] . ' ' . $demo['last_name'])); ?></p></div>
             <div><span class="text-xs font-semibold text-slate-400 uppercase">Email</span><p><a href="mailto:<?php echo e($demo['email']); ?>" class="text-primary hover:underline"><?php echo e($demo['email']); ?></a></p></div>
             <div><span class="text-xs font-semibold text-slate-400 uppercase">Phone</span><p class="text-slate-800 dark:text-white"><?php echo e($demo['phone']); ?></p></div>
-            <div><span class="text-xs font-semibold text-slate-400 uppercase">Organization</span><p class="text-slate-800 dark:text-white"><?php echo e($demo['organization'] ?: '—'); ?></p></div>
-            <div><span class="text-xs font-semibold text-slate-400 uppercase">Size</span><p class="text-slate-800 dark:text-white"><?php echo e($demo['organization_size'] ?: '—'); ?></p></div>
-            <div><span class="text-xs font-semibold text-slate-400 uppercase">Role</span><p class="text-slate-800 dark:text-white"><?php echo e($demo['role'] ?: '—'); ?></p></div>
-            <div><span class="text-xs font-semibold text-slate-400 uppercase">Product Interest</span><p class="text-slate-800 dark:text-white font-semibold"><?php echo e($demo['product_interest']); ?></p></div>
+            <div><span class="text-xs font-semibold text-slate-400 uppercase">Organization</span><p class="text-slate-800 dark:text-white"><?php echo e($demo['company'] ?: '—'); ?></p></div>
+            <div><span class="text-xs font-semibold text-slate-400 uppercase">Size</span><p class="text-slate-800 dark:text-white"><?php echo e($demo['organization_size'] ?? '—'); ?></p></div>
+            <div><span class="text-xs font-semibold text-slate-400 uppercase">Role</span><p class="text-slate-800 dark:text-white"><?php echo e($demo['role'] ?? '—'); ?></p></div>
+            <div><span class="text-xs font-semibold text-slate-400 uppercase">Product Interest</span><p class="text-slate-800 dark:text-white font-semibold"><?php echo e($demo['product']); ?></p></div>
             <div><span class="text-xs font-semibold text-slate-400 uppercase">Preferred Date/Time</span><p class="text-slate-800 dark:text-white"><?php echo e(($demo['preferred_date'] ?: '—') . ' ' . ($demo['preferred_time'] ?: '')); ?></p></div>
             <div><span class="text-xs font-semibold text-slate-400 uppercase">Submitted</span><p class="text-slate-800 dark:text-white"><?php echo format_date($demo['created_at']); ?></p></div>
             <div>
@@ -64,8 +64,8 @@ if ($action === 'view' && $id > 0):
                 </div>
             </div>
         </div>
-        <?php if (!empty($demo['message'])): ?>
-            <div><span class="text-xs font-semibold text-slate-400 uppercase">Message</span><p class="text-slate-600 dark:text-gray-300 mt-1 whitespace-pre-wrap"><?php echo e($demo['message']); ?></p></div>
+        <?php if (!empty($demo['notes'])): ?>
+            <div><span class="text-xs font-semibold text-slate-400 uppercase">Notes</span><p class="text-slate-600 dark:text-gray-300 mt-1 whitespace-pre-wrap"><?php echo e($demo['notes']); ?></p></div>
         <?php endif; ?>
     </div>
 </div>
@@ -106,10 +106,10 @@ $demos = db_fetch_all("SELECT * FROM demo_requests $where ORDER BY created_at DE
                 <?php else: foreach ($demos as $d): ?>
                     <tr class="hover:bg-slate-50 dark:hover:bg-white/5">
                         <td class="px-4 py-3">
-                            <div class="font-semibold text-slate-700 dark:text-gray-200"><?php echo e($d['name']); ?></div>
-                            <div class="text-xs text-slate-400"><?php echo e($d['organization']); ?></div>
+                            <div class="font-semibold text-slate-700 dark:text-gray-200"><?php echo e(trim($d['first_name'] . ' ' . $d['last_name'])); ?></div>
+                            <div class="text-xs text-slate-400"><?php echo e($d['company'] ?? ''); ?></div>
                         </td>
-                        <td class="px-4 py-3 text-slate-600 dark:text-gray-300"><?php echo e($d['product_interest']); ?></td>
+                        <td class="px-4 py-3 text-slate-600 dark:text-gray-300"><?php echo e($d['product'] ?? ''); ?></td>
                         <td class="px-4 py-3 text-slate-500"><?php echo e($d['preferred_date'] ?: time_ago($d['created_at'])); ?></td>
                         <td class="px-4 py-3">
                             <?php $c = ['pending'=>'orange','scheduled'=>'blue','completed'=>'green','cancelled'=>'red'][$d['status']] ?? 'slate'; ?>

@@ -39,8 +39,7 @@ if ($api_path === 'newsletter' && $method === 'POST') {
 
     // Subscribe
     $safe_email = db_escape($email);
-    $ip = db_escape(get_client_ip());
-    db_query("INSERT INTO newsletter_subscribers (email, ip_address, status, subscribed_at) VALUES ('$safe_email', '$ip', 'active', NOW())");
+    db_query("INSERT INTO newsletter_subscribers (email, status, subscribed_at) VALUES ('$safe_email', 'active', NOW())");
 
     // Notify admin
     notify_admin('New Newsletter Subscriber', "New subscriber: $email");
