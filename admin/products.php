@@ -187,7 +187,7 @@ else: // LIST
         foreach ($items as $p): ?>
                     <tr class="hover:bg-slate-50 dark:hover:bg-white/5">
                         <td class="px-4 py-3 font-semibold text-slate-700 dark:text-gray-200"><?php echo e($p['name_en']); ?></td>
-                        <td class="px-4 py-3 text-slate-500"><?php echo e(truncate($p['tagline'], 50)); ?></td>
+                        <td class="px-4 py-3 text-slate-500"><?php echo e(truncate($p['tagline'] ?? '', 50)); ?></td>
                         <td class="px-4 py-3">
                             <?php $c = ['published' => 'green', 'draft' => 'orange', 'archived' => 'slate'][$p['status']] ?? 'slate'; ?>
                             <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $c; ?>-100 dark:bg-<?php echo $c; ?>-500/10 text-<?php echo $c; ?>-600"><?php echo ucfirst($p['status']); ?></span>
