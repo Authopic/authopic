@@ -33,7 +33,8 @@ if ($api_path === 'newsletter' && $method === 'POST') {
         } else {
             // Resubscribe
             db_query("UPDATE newsletter_subscribers SET status='active', subscribed_at=NOW() WHERE id=" . (int)$existing['id']);
-            json_response(['success' => true, 'message' => 'Welcome back! You have been re-subscribed.']);
+            send_welcome_email($email);
+            json_response(['success' => true, 'message' => 'Welcome back! Check your inbox for our latest updates.']);
         }
     }
 
@@ -41,10 +42,13 @@ if ($api_path === 'newsletter' && $method === 'POST') {
     $safe_email = db_escape($email);
     db_query("INSERT INTO newsletter_subscribers (email, status, subscribed_at) VALUES ('$safe_email', 'active', NOW())");
 
+    // Welcome email to subscriber
+    send_welcome_email($email);
+
     // Notify admin
     notify_admin('New Newsletter Subscriber', "New subscriber: $email");
 
-    json_response(['success' => true, 'message' => 'Successfully subscribed! Thank you.']);
+    json_response(['success' => true, 'message' => 'Successfully subscribed! Check your inbox for a welcome email.']);
 }
 
 // ---- Contact Form (AJAX) ----
@@ -112,36 +116,79 @@ if ($api_path === 'demo' && $method === 'POST') {
         json_response(['success' => false, 'message' => 'Too many requests. Please try again later.'], 429);
     }
 
-    $name = trim(post('name'));
-    $email = trim(post('email'));
-    $phone = trim(post('phone'));
+    $name         = trim(post('name'));
+    $email        = trim(post('email'));
+    $phone        = trim(post('phone'));
     $organization = trim(post('organization'));
-    $org_size = trim(post('organization_size'));
-    $role = trim(post('role'));
-    $product = trim(post('product_interest'));
-    $date = trim(post('preferred_date'));
-    $time = trim(post('preferred_time'));
-    $message = trim(post('message'));
+    $org_size     = trim(post('organization_size'));
+    $role         = trim(post('role'));
+    $product      = trim(post('product_interest'));
+    $date         = trim(post('preferred_date'));
+    $time         = trim(post('preferred_time'));
+    $message      = trim(post('message'));
 
     $errors = [];
-    if (empty($name)) $errors[] = 'Name is required.';
-    if (empty($email) || !is_valid_email($email)) $errors[] = 'Valid email is required.';
-    if (empty($phone)) $errors[] = 'Phone is required.';
+    if (empty($name))                                    $errors[] = 'Name is required.';
+    if (empty($email) || !is_valid_email($email))        $errors[] = 'Valid email is required.';
+    if (empty($phone))                                   $errors[] = 'Phone is required.';
 
     if (!empty($errors)) {
         json_response(['success' => false, 'message' => implode(' ', $errors)], 400);
     }
 
-    $safe = [];
-    foreach (['name','email','phone','organization','org_size','role','product','date','time','message'] as $f) {
-        $safe[$f] = db_escape($$f);
+    // Split name into first / last
+    $name_parts  = array_filter(explode(' ', $name, 2));
+    $first_name  = trim($name_parts[0] ?? $name);
+    $last_name   = trim($name_parts[1] ?? '');
+
+    // Map product selection → ENUM
+    $product_lower = strtolower($product);
+    if (strpos($product_lower, 'erp') !== false) {
+        $product_enum = 'erp';
+    } elseif (strpos($product_lower, 'sms') !== false || strpos($product_lower, 'school') !== false) {
+        $product_enum = 'sms';
+    } else {
+        $product_enum = 'both';
     }
+
+    // Map time slot labels → HH:MM:SS
+    $time_map         = ['morning' => '09:00:00', 'afternoon' => '14:00:00', 'flexible' => '09:00:00'];
+    $preferred_time_v = $time_map[$time] ?? ($time ?: '09:00:00');
+    $preferred_date_v = !empty($date) ? $date : date('Y-m-d', strtotime('+3 days'));
+
+    // Pack extra info into notes
+    $notes_parts = [];
+    if (!empty($message))   $notes_parts[] = $message;
+    if (!empty($role))      $notes_parts[] = "Role: $role";
+    if (!empty($org_size))  $notes_parts[] = "Org size: $org_size";
+    if (!empty($product))   $notes_parts[] = "Product interest: $product";
+    $notes_text = implode("\n", $notes_parts);
+
+    $f  = db_escape($first_name);
+    $l  = db_escape($last_name);
+    $em = db_escape($email);
+    $ph = db_escape($phone);
+    $co = db_escape($organization);
+    $pr = db_escape($product_enum);
+    $pd = db_escape($preferred_date_v);
+    $pt = db_escape($preferred_time_v);
+    $no = db_escape($notes_text);
     $ip = db_escape(get_client_ip());
 
-    db_query("INSERT INTO demo_requests (name, email, phone, organization, organization_size, role, product_interest, preferred_date, preferred_time, message, ip_address, status, created_at) 
-              VALUES ('{$safe['name']}', '{$safe['email']}', '{$safe['phone']}', '{$safe['organization']}', '{$safe['org_size']}', '{$safe['role']}', '{$safe['product']}', '{$safe['date']}', '{$safe['time']}', '{$safe['message']}', '$ip', 'pending', NOW())");
+    db_query("INSERT INTO demo_requests (first_name, last_name, email, phone, company, product, preferred_date, preferred_time, notes, ip_address, status, created_at)
+              VALUES ('$f', '$l', '$em', '$ph', '$co', '$pr', '$pd', '$pt', '$no', '$ip', 'pending', NOW())");
 
-    notify_admin('New Demo Request', "From: $name <$email>\nOrganization: $organization\nProduct: $product\nDate: $date $time");
+    // Auto-subscribe to newsletter
+    $existing_sub = db_fetch_one("SELECT id, status FROM newsletter_subscribers WHERE email = '$em'");
+    if (!$existing_sub) {
+        $sub_name = db_escape(trim($first_name . ' ' . $last_name));
+        db_query("INSERT INTO newsletter_subscribers (email, name, status, subscribed_at) VALUES ('$em', '$sub_name', 'active', NOW())");
+        send_welcome_email($email);
+    } elseif ($existing_sub['status'] === 'unsubscribed') {
+        db_query("UPDATE newsletter_subscribers SET status='active', subscribed_at=NOW() WHERE id=" . (int)$existing_sub['id']);
+    }
+
+    notify_admin('New Demo Request', "From: $name <$email>\nOrganization: $organization\nProduct: $product\nDate: $preferred_date_v $preferred_time_v");
 
     json_response(['success' => true, 'message' => 'Demo request submitted! We will contact you shortly.']);
 }

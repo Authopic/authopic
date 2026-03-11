@@ -748,6 +748,146 @@ function notify_admin($subject, $message) {
 }
 
 /**
+ * Send a beautiful welcome email to a new newsletter subscriber
+ */
+function send_welcome_email($to_email) {
+    $site_name  = get_setting('site_name', 'Authopic Technologies PLC');
+    $site_url   = rtrim(SITE_URL, '/');
+    $site_email = get_setting('site_email', 'info@authopic.com');
+    $site_phone = get_setting('site_phone', '+251 911 000 000');
+
+    // Pull live published products
+    $products = db_fetch_all("SELECT name_en, tagline_en, slug FROM products WHERE status='published' ORDER BY sort_order ASC LIMIT 6");
+
+    // Build product cards HTML
+    $product_cards = '';
+    $colors = ['#0066FF','#06B6D4','#8B5CF6','#10B981','#F59E0B','#EF4444'];
+    foreach ($products as $i => $p) {
+        $color   = $colors[$i % count($colors)];
+        $link    = $site_url . '/products/' . htmlspecialchars($p['slug'], ENT_QUOTES);
+        $name    = htmlspecialchars($p['name_en'], ENT_QUOTES);
+        $tagline = htmlspecialchars($p['tagline_en'] ?? '', ENT_QUOTES);
+        $product_cards .= '
+        <tr>
+          <td style="padding:8px 0;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f8faff;border-radius:12px;border-left:4px solid ' . $color . ';">
+              <tr>
+                <td style="padding:16px 20px;">
+                  <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#0f172a;">' . $name . '</p>
+                  ' . ($tagline ? '<p style="margin:0 0 10px;font-size:13px;color:#64748b;">' . $tagline . '</p>' : '') . '
+                  <a href="' . $link . '" style="display:inline-block;padding:6px 16px;background:' . $color . ';color:#fff;font-size:12px;font-weight:600;border-radius:6px;text-decoration:none;">Learn More &rarr;</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr><td style="height:8px;"></td></tr>';
+    }
+
+    if (empty($product_cards)) {
+        $product_cards = '<tr><td style="color:#64748b;font-size:14px;padding:8px 0;">Visit our website to explore all our solutions.</td></tr>';
+    }
+
+    $subject = 'Welcome to ' . $site_name . ' – Thank you for subscribing!';
+
+    $html = '<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . htmlspecialchars($subject) . '</title></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Arial,sans-serif;">
+
+  <!-- Wrapper -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f1f5f9;padding:40px 16px;">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#0066FF 0%,#06B6D4 100%);border-radius:20px 20px 0 0;padding:48px 40px 40px;text-align:center;">
+            <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.75);letter-spacing:2px;text-transform:uppercase;">Newsletter</p>
+            <h1 style="margin:0 0 12px;font-size:32px;font-weight:800;color:#ffffff;line-height:1.2;">Welcome to<br>' . htmlspecialchars($site_name) . '! 👋</h1>
+            <p style="margin:0;font-size:16px;color:rgba(255,255,255,0.85);">You&rsquo;re now part of our community. We&rsquo;re thrilled to have you!</p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="background:#ffffff;padding:40px;">
+
+            <p style="margin:0 0 24px;font-size:15px;color:#334155;line-height:1.7;">
+              Thank you for subscribing! You&rsquo;ll be the first to know about our latest product updates, industry insights, case studies, and exclusive offers.
+            </p>
+
+            <!-- What we do -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f8faff;border-radius:16px;margin-bottom:32px;">
+              <tr><td style="padding:28px 28px 12px;">
+                <p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#0066FF;letter-spacing:1.5px;text-transform:uppercase;">What We Do</p>
+                <p style="margin:0 0 16px;font-size:17px;font-weight:700;color:#0f172a;">Innovative Technology Solutions for Ethiopia &amp; Beyond</p>
+                <p style="margin:0 0 20px;font-size:14px;color:#64748b;line-height:1.7;">
+                  ' . htmlspecialchars($site_name) . ' designs and delivers modern software systems that help schools, businesses, and organisations work smarter &mdash; from school management and ERP to custom digital solutions built for the Ethiopian market.
+                </p>
+              </td></tr>
+            </table>
+
+            <!-- Products -->
+            <p style="margin:0 0 16px;font-size:17px;font-weight:700;color:#0f172a;">Our Products</p>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              ' . $product_cards . '
+            </table>
+
+            <!-- CTA -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:32px;">
+              <tr><td align="center">
+                <a href="' . $site_url . '/request-demo" style="display:inline-block;padding:16px 36px;background:linear-gradient(135deg,#0066FF,#06B6D4);color:#ffffff;font-size:15px;font-weight:700;border-radius:12px;text-decoration:none;box-shadow:0 4px 20px rgba(0,102,255,0.3);"
+                >Schedule a Free Demo &rarr;</a>
+              </td></tr>
+            </table>
+
+          </td>
+        </tr>
+
+        <!-- Contact bar -->
+        <tr>
+          <td style="background:#0f172a;border-radius:0 0 20px 20px;padding:32px 40px;">
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#0066FF;letter-spacing:1.5px;text-transform:uppercase;">Get in Touch</p>
+            <p style="margin:0 0 16px;font-size:14px;color:#94a3b8;">We&rsquo;d love to hear from you. Reach us any time.</p>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="padding-bottom:8px;">
+                  <a href="mailto:' . htmlspecialchars($site_email) . '" style="color:#60a5fa;text-decoration:none;font-size:14px;">
+                    &#9993;&nbsp; ' . htmlspecialchars($site_email) . '
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-bottom:8px;">
+                  <span style="color:#94a3b8;font-size:14px;">&#128222;&nbsp; ' . htmlspecialchars($site_phone) . '</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="' . $site_url . '" style="color:#60a5fa;text-decoration:none;font-size:14px;">&#127758;&nbsp; ' . htmlspecialchars($site_url) . '</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Footer note -->
+        <tr><td style="padding:24px 0;text-align:center;">
+          <p style="margin:0;font-size:12px;color:#94a3b8;">You&rsquo;re receiving this because you subscribed at ' . htmlspecialchars($site_url) . '.<br>If this was a mistake, you can ignore this email.</p>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+
+</body>
+</html>';
+
+    return send_email($to_email, $subject, $html);
+}
+
+/**
  * Basic email template
  */
 function email_template($title, $content) {

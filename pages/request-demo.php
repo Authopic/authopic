@@ -76,6 +76,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             db_query("INSERT INTO `demo_requests` (`first_name`, `last_name`, `email`, `phone`, `company`, `product`, `preferred_date`, `preferred_time`, `notes`, `ip_address`, `status`, `created_at`)
                 VALUES ('$f', '$l', '$em', '$ph', '$co', '$pr', '$pd', '$pt', '$no', '$ip', 'pending', NOW())");
 
+            // Auto-subscribe demo requester to newsletter
+            $existing_sub = db_fetch_one("SELECT id, status FROM newsletter_subscribers WHERE email = '$em'");
+            if (!$existing_sub) {
+                $sub_name = db_escape(trim($first_name . ' ' . $last_name));
+                db_query("INSERT INTO newsletter_subscribers (email, name, status, subscribed_at) VALUES ('$em', '$sub_name', 'active', NOW())");
+                send_welcome_email($email);
+            } elseif ($existing_sub['status'] === 'unsubscribed') {
+                db_query("UPDATE newsletter_subscribers SET status='active', subscribed_at=NOW() WHERE id=" . (int)$existing_sub['id']);
+            }
+
             notify_admin('New Demo Request', "Name: $name\nEmail: $email\nPhone: $phone\nProduct: $product\nCompany: $company\nPreferred Date: $preferred_date_val $preferred_time");
 
             redirect('/thank-you/demo');
