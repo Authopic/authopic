@@ -26,19 +26,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Set default language
-if (!isset($_SESSION['lang'])) {
-    $_SESSION['lang'] = 'en';
-}
-
-// Handle language switch
-if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'am'])) {
-    $_SESSION['lang'] = $_GET['lang'];
-    setcookie('lang', $_GET['lang'], time() + (365 * 24 * 60 * 60), '/');
-} elseif (isset($_COOKIE['lang']) && !isset($_SESSION['lang_set'])) {
-    $_SESSION['lang'] = $_COOKIE['lang'];
-    $_SESSION['lang_set'] = true;
-}
+// Language locked to English
+$_SESSION['lang'] = 'en';
 
 // ============================================
 // Parse URL

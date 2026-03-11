@@ -134,10 +134,7 @@ endforeach; ?>
                 
                 <!-- Right Actions -->
                 <div class="flex items-center gap-2">
-                    <!-- Language Toggle -->
-                    <a href="?lang=<?php echo $lang === 'en' ? 'am' : 'en'; ?>" class="p-2 rounded-lg text-sm font-medium text-slate-500 dark:text-gray-400 hover:bg-primary/5 transition-all duration-200" title="Switch Language">
-                        <?php echo $lang === 'en' ? 'አማ' : 'EN'; ?>
-                    </a>
+                    <!-- Language Toggle (disabled — English only) -->
                     
                     <!-- Dark/Light Toggle -->
                     <button id="themeToggle" class="p-2 rounded-lg text-slate-500 dark:text-gray-400 hover:bg-primary/5 transition-all duration-200" aria-label="Toggle theme">
