@@ -210,10 +210,8 @@ endforeach; ?>
         </div>
     </header>
 
-    <!-- Flash Messages -->
-    <div class="fixed top-20 right-4 z-50 w-80 space-y-2" id="flashContainer">
-        <?php echo render_flash_messages(); ?>
-    </div>
+    <!-- Flash Messages (rendered as toasts via JS) -->
+    <?php echo render_flash_messages(); ?>
 
     <!-- Main Content -->
     <main id="main-content" class="min-h-screen">

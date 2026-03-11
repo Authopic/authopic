@@ -70,10 +70,8 @@ $admin_page = isset($admin_page) ? $admin_page : 'dashboard';
                 </div>
             </header>
 
-            <!-- Flash Messages -->
-            <div class="px-4 sm:px-6 pt-4">
-                <?php echo render_flash_messages(); ?>
-            </div>
+            <!-- Flash Messages (rendered as toasts via JS) -->
+            <?php echo render_flash_messages(); ?>
 
             <!-- Page Content -->
             <main class="flex-1 p-4 sm:p-6">

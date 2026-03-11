@@ -207,7 +207,7 @@ $items = db_fetch_all("SELECT p.*, au.full_name as author_name FROM pages p LEFT
                         <td class="px-4 py-3 text-slate-500 text-xs"><?php echo $p['updated_at'] ? time_ago($p['updated_at']) : format_date($p['created_at'], 'M j, Y'); ?></td>
                         <td class="px-4 py-3 text-right space-x-1">
                             <a href="<?php echo url('/admin/pages?action=edit&id=' . $p['id']); ?>" class="px-2 py-1 text-xs text-primary hover:bg-blue-50 rounded-lg">Edit</a>
-                            <a href="<?php echo url('/admin/pages?action=delete&id=' . $p['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
+                            <a href="<?php echo url('/admin/pages?action=delete&id=' . $p['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($p['title_en']); ?>" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; endif; ?>

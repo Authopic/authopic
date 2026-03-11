@@ -196,7 +196,7 @@ $items = db_fetch_all("SELECT * FROM testimonials ORDER BY sort_order ASC, creat
                             <?php $sc = $t['status'] === 'approved' ? 'green' : ($t['status'] === 'rejected' ? 'red' : 'orange'); ?>
                             <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $sc; ?>-100 text-<?php echo $sc; ?>-600"><?php echo ucfirst($t['status']); ?></span>
                             <a href="<?php echo url('/admin/testimonials?action=edit&id=' . $t['id']); ?>" class="text-xs text-primary hover:underline">Edit</a>
-                            <a href="<?php echo url('/admin/testimonials?action=delete&id=' . $t['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="text-xs text-red-500 hover:underline">Delete</a>
+                            <a href="<?php echo url('/admin/testimonials?action=delete&id=' . $t['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($t['client_name']); ?>" class="text-xs text-red-500 hover:underline">Delete</a>
                         </div>
                     </div>
                     <p class="text-xs text-slate-400 mb-2"><?php echo e($t['client_position']); ?><?php echo $t['company_name'] ? ' at ' . e($t['company_name']) : ''; ?></p>

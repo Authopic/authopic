@@ -234,7 +234,7 @@ $items = db_fetch_all("SELECT * FROM portfolio $where ORDER BY created_at DESC L
                         </td>
                         <td class="px-4 py-3 text-right space-x-1">
                             <a href="<?php echo url('/admin/portfolio?action=edit&id=' . $p['id']); ?>" class="px-2 py-1 text-xs text-primary hover:bg-blue-50 rounded-lg">Edit</a>
-                            <a href="<?php echo url('/admin/portfolio?action=delete&id=' . $p['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
+                            <a href="<?php echo url('/admin/portfolio?action=delete&id=' . $p['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($p['title_en']); ?>" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; endif; ?>

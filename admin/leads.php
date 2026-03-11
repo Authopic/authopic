@@ -201,7 +201,7 @@ $leads = db_fetch_all("SELECT * FROM leads $where ORDER BY created_at DESC LIMIT
                             <td class="px-4 py-3 text-slate-500 dark:text-gray-400"><?php echo time_ago($lead['created_at']); ?></td>
                             <td class="px-4 py-3 text-right">
                                 <a href="<?php echo url('/admin/leads?action=view&id=' . $lead['id']); ?>" class="inline-flex items-center px-2 py-1 text-xs text-primary hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors">View</a>
-                                <a href="<?php echo url('/admin/leads?action=delete&id=' . $lead['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="inline-flex items-center px-2 py-1 text-xs text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">Delete</a>
+                                <a href="<?php echo url('/admin/leads?action=delete&id=' . $lead['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($lead['name']); ?>" class="inline-flex items-center px-2 py-1 text-xs text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors">Delete</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

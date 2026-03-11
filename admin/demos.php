@@ -117,7 +117,7 @@ $demos = db_fetch_all("SELECT * FROM demo_requests $where ORDER BY created_at DE
                         </td>
                         <td class="px-4 py-3 text-right">
                             <a href="<?php echo url('/admin/demos?action=view&id=' . $d['id']); ?>" class="px-2 py-1 text-xs text-primary hover:bg-blue-50 rounded-lg">View</a>
-                            <a href="<?php echo url('/admin/demos?action=delete&id=' . $d['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
+                            <a href="<?php echo url('/admin/demos?action=delete&id=' . $d['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($d['first_name'] . ' ' . $d['last_name']); ?>" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; endif; ?>

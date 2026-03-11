@@ -196,7 +196,7 @@ else: // LIST
                         <td class="px-4 py-3 text-right space-x-1">
                             <a href="<?php echo url('/products/' . $p['slug']); ?>" target="_blank" class="px-2 py-1 text-xs text-slate-500 hover:text-primary rounded-lg">View</a>
                             <a href="<?php echo url('/admin/products?action=edit&id=' . $p['id']); ?>" class="px-2 py-1 text-xs text-primary hover:bg-blue-50 rounded-lg">Edit</a>
-                            <a href="<?php echo url('/admin/products?action=delete&id=' . $p['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
+                            <a href="<?php echo url('/admin/products?action=delete&id=' . $p['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($p['name_en']); ?>" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
                         </td>
                     </tr>
                 <?php

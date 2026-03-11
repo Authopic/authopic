@@ -400,28 +400,258 @@
     };
 
     // ============================================================
-    // TOAST NOTIFICATIONS
+    // TOAST NOTIFICATION SYSTEM (Beautiful)
     // ============================================================
-    function showToast(message, type) {
-        type = type || 'success';
-        var toast = document.createElement('div');
-        toast.className = 'toast toast-' + type;
-        toast.textContent = message;
-        document.body.appendChild(toast);
+    var _toastContainer = null;
 
-        requestAnimationFrame(function() {
-            toast.classList.add('show');
+    var _toastIcons = {
+        success: '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>',
+        error:   '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>',
+        warning: '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>',
+        info:    '<svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>'
+    };
+
+    var _toastTitles = { success: 'Success', error: 'Error', warning: 'Warning', info: 'Info' };
+
+    function _safeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function _getToastContainer() {
+        if (!_toastContainer) {
+            _toastContainer = document.createElement('div');
+            _toastContainer.id = 'toast-container';
+            document.body.appendChild(_toastContainer);
+        }
+        return _toastContainer;
+    }
+
+    function _dismissToast(toast) {
+        if (!toast || toast.classList.contains('toast-hiding')) return;
+        toast.classList.add('toast-hiding');
+        toast.classList.remove('show');
+        setTimeout(function() {
+            if (toast.parentElement) toast.parentElement.removeChild(toast);
+        }, 400);
+    }
+
+    function showToast(message, type, title, duration) {
+        type     = type     || 'success';
+        title    = title    || _toastTitles[type] || 'Notification';
+        duration = duration || 4500;
+
+        var container = _getToastContainer();
+
+        // Cap at 5 simultaneous toasts
+        var existing = container.querySelectorAll('.toast-notification');
+        if (existing.length >= 5) _dismissToast(existing[0]);
+
+        var toast = document.createElement('div');
+        toast.className = 'toast-notification toast-' + type;
+        toast.innerHTML =
+            '<div class="toast-icon-wrap">' + (_toastIcons[type] || _toastIcons.info) + '</div>' +
+            '<div class="toast-body">' +
+                '<div class="toast-title">' + _safeHtml(title) + '</div>' +
+                '<div class="toast-msg">' + _safeHtml(message) + '</div>' +
+            '</div>' +
+            '<button class="toast-close-btn" aria-label="Dismiss">' +
+                '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>' +
+            '</button>' +
+            '<div class="toast-progress-bar" style="width:100%"></div>';
+
+        container.appendChild(toast);
+
+        toast.querySelector('.toast-close-btn').addEventListener('click', function() {
+            _dismissToast(toast);
         });
 
-        setTimeout(function() {
-            toast.classList.remove('show');
-            setTimeout(function() {
-                document.body.removeChild(toast);
-            }, 400);
-        }, 3000);
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() { toast.classList.add('show'); });
+        });
+
+        // Animated progress bar countdown
+        var progress = toast.querySelector('.toast-progress-bar');
+        var startTime = null;
+        var remainingDuration = duration;
+        var raf;
+
+        function animateProgress(ts) {
+            if (!startTime) startTime = ts;
+            var elapsed = ts - startTime;
+            var pct = Math.max(0, 100 - (elapsed / remainingDuration * 100));
+            progress.style.width = pct + '%';
+            if (elapsed < remainingDuration) {
+                raf = requestAnimationFrame(animateProgress);
+            } else {
+                _dismissToast(toast);
+            }
+        }
+        raf = requestAnimationFrame(animateProgress);
+
+        // Pause progress on hover
+        toast.addEventListener('mouseenter', function() {
+            cancelAnimationFrame(raf);
+            remainingDuration = (parseFloat(progress.style.width) / 100) * remainingDuration;
+            startTime = null;
+        });
+        toast.addEventListener('mouseleave', function() {
+            raf = requestAnimationFrame(animateProgress);
+        });
     }
 
     window.showToast = showToast;
+
+    // ============================================================
+    // CONFIRM DIALOG (Beautiful — replaces native browser confirm)
+    // ============================================================
+    var _confirmOverlay = null;
+    var _confirmCallback = null;
+
+    var _confirmIconPaths = {
+        danger:  'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
+        warning: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z',
+        info:    'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+    };
+    var _confirmOkColors = { danger: '#dc2626', warning: '#d97706', info: '#2563eb' };
+
+    function _buildConfirmOverlay() {
+        if (_confirmOverlay) return;
+        _confirmOverlay = document.createElement('div');
+        _confirmOverlay.id = 'confirm-overlay';
+        _confirmOverlay.setAttribute('role', 'dialog');
+        _confirmOverlay.setAttribute('aria-modal', 'true');
+        _confirmOverlay.style.display = 'none';
+        _confirmOverlay.innerHTML =
+            '<div id="confirm-dialog">' +
+                '<div id="confirm-icon-ring" class="confirm-icon-ring ci-danger">' +
+                    '<svg id="confirm-svg" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"></svg>' +
+                '</div>' +
+                '<div id="confirm-title" class="confirm-title"></div>' +
+                '<div id="confirm-message" class="confirm-message"></div>' +
+                '<div class="confirm-actions">' +
+                    '<button id="confirm-cancel-btn" class="confirm-btn confirm-btn-cancel">Cancel</button>' +
+                    '<button id="confirm-ok-btn" class="confirm-btn confirm-btn-ok">Confirm</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(_confirmOverlay);
+
+        document.getElementById('confirm-cancel-btn').addEventListener('click', _closeConfirm);
+        document.getElementById('confirm-ok-btn').addEventListener('click', function() {
+            var cb = _confirmCallback;
+            _closeConfirm();
+            if (cb) setTimeout(cb, 10);
+        });
+        _confirmOverlay.addEventListener('click', function(e) {
+            if (e.target === _confirmOverlay) _closeConfirm();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (!_confirmOverlay || _confirmOverlay.style.display === 'none') return;
+            if (e.key === 'Escape') { _closeConfirm(); }
+            if (e.key === 'Enter') {
+                var cb = _confirmCallback;
+                _closeConfirm();
+                if (cb) setTimeout(cb, 10);
+            }
+        });
+    }
+
+    function showConfirm(opts) {
+        _buildConfirmOverlay();
+        var type        = opts.type        || 'danger';
+        var title       = opts.title       || 'Are you sure?';
+        var message     = opts.message     || '';
+        var confirmText = opts.confirmText || 'Confirm';
+        var cancelText  = opts.cancelText  || 'Cancel';
+        _confirmCallback = opts.onConfirm || null;
+
+        var ring = document.getElementById('confirm-icon-ring');
+        ring.className = 'confirm-icon-ring ci-' + type;
+
+        var iconPath = _confirmIconPaths[type] || _confirmIconPaths.danger;
+        document.getElementById('confirm-svg').innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="' + iconPath + '"/>';
+
+        document.getElementById('confirm-title').textContent   = title;
+        document.getElementById('confirm-message').textContent = message;
+        document.getElementById('confirm-cancel-btn').textContent = cancelText;
+        var okBtn = document.getElementById('confirm-ok-btn');
+        okBtn.textContent = confirmText;
+        okBtn.style.background = _confirmOkColors[type] || _confirmOkColors.danger;
+
+        _confirmOverlay.style.display = 'flex';
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() { _confirmOverlay.classList.add('confirm-show'); });
+        });
+        setTimeout(function() {
+            var cancel = document.getElementById('confirm-cancel-btn');
+            if (cancel) cancel.focus();
+        }, 80);
+    }
+
+    function _closeConfirm() {
+        if (!_confirmOverlay) return;
+        _confirmOverlay.classList.remove('confirm-show');
+        _confirmCallback = null;
+        setTimeout(function() {
+            if (_confirmOverlay) _confirmOverlay.style.display = 'none';
+        }, 320);
+    }
+
+    window.showConfirm = showConfirm;
+
+    // ============================================================
+    // DELETE CONFIRMATION (direct global — called from onclick)
+    // ============================================================
+    window.authConfirmDelete = function(link) {
+        var href  = link.getAttribute('href');
+        var label = link.getAttribute('data-label') ||
+                    (link.closest('tr') && link.closest('tr').querySelector('td')
+                        ? link.closest('tr').querySelector('td').textContent.trim()
+                        : 'this item');
+        showConfirm({
+            type:        'danger',
+            title:       'Delete Item',
+            message:     'Are you sure you want to permanently delete \u201c' + label + '\u201d? This action cannot be undone.',
+            confirmText: 'Yes, Delete',
+            cancelText:  'Cancel',
+            onConfirm:   function() { window.location.href = href; }
+        });
+    };
+
+    // ============================================================
+    // FLASH MESSAGES → TOASTS  (app.js loads at bottom of body,
+    //   DOM is already populated; run immediately, no event needed)
+    // ============================================================
+    var _flashTitles = { success: 'Success!', error: 'Error', warning: 'Warning', info: 'Info' };
+
+    function _initFlash() {
+        document.querySelectorAll('.js-flash-init').forEach(function(el) {
+            var type    = el.getAttribute('data-type')    || 'info';
+            var message = el.getAttribute('data-message') || '';
+            if (message) showToast(message, type, _flashTitles[type] || 'Notification');
+            el.remove();
+        });
+        // Legacy HTML flash divs
+        document.querySelectorAll('.flash-message').forEach(function(msg) {
+            var text = msg.querySelector('span') ? msg.querySelector('span').textContent : msg.textContent;
+            var type = 'info';
+            ['success','error','warning','info'].forEach(function(t) {
+                if (msg.className.indexOf(t) !== -1) type = t;
+            });
+            if (text.trim()) showToast(text.trim(), type);
+            msg.remove();
+        });
+    }
+
+    // Run immediately if DOM is ready, otherwise wait for it
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _initFlash);
+    } else {
+        _initFlash();
+    }
+    });
 
     // ============================================================
     // NEWSLETTER FORM (AJAX)
@@ -803,25 +1033,6 @@
         };
         reader.readAsDataURL(input.files[0]);
     };
-
-    // ============================================================
-    // CONFIRM DELETE (Admin)
-    // ============================================================
-    window.confirmDelete = function(message) {
-        return confirm(message || 'Are you sure you want to delete this item? This action cannot be undone.');
-    };
-
-    // ============================================================
-    // AUTO-HIDE FLASH MESSAGES
-    // ============================================================
-    document.querySelectorAll('.flash-message').forEach(function(msg) {
-        setTimeout(function() {
-            msg.style.opacity = '0';
-            msg.style.transform = 'translateY(-10px)';
-            msg.style.transition = 'all 0.3s ease';
-            setTimeout(function() { msg.remove(); }, 300);
-        }, 5000);
-    });
 
     // ============================================================
     // SLUG GENERATOR (Admin)

@@ -186,7 +186,7 @@ $items = db_fetch_all("SELECT * FROM team_members ORDER BY sort_order ASC, creat
             <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $c; ?>-100 text-<?php echo $c; ?>-600 mb-3 inline-block"><?php echo $m['is_active'] ? 'Active' : 'Inactive'; ?></span>
             <div class="flex justify-center gap-2 mt-3">
                 <a href="<?php echo url('/admin/team?action=edit&id=' . $m['id']); ?>" class="px-3 py-1 text-xs text-primary bg-blue-50 dark:bg-blue-500/10 rounded-lg hover:bg-blue-100">Edit</a>
-                <a href="<?php echo url('/admin/team?action=delete&id=' . $m['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="px-3 py-1 text-xs text-red-500 bg-red-50 dark:bg-red-500/10 rounded-lg hover:bg-red-100">Delete</a>
+                <a href="<?php echo url('/admin/team?action=delete&id=' . $m['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($m['name_en']); ?>" class="px-3 py-1 text-xs text-red-500 bg-red-50 dark:bg-red-500/10 rounded-lg hover:bg-red-100">Delete</a>
             </div>
         </div>
     <?php endforeach; endif; ?>

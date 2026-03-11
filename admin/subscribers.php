@@ -106,7 +106,7 @@ $this_month = db_fetch_one("SELECT COUNT(*) as c FROM newsletter_subscribers WHE
                         </td>
                         <td class="px-4 py-3 text-slate-500"><?php echo format_date($s['subscribed_at'], 'M j, Y g:ia'); ?></td>
                         <td class="px-4 py-3 text-right">
-                            <a href="<?php echo url('/admin/subscribers?action=delete&id=' . $s['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
+                            <a href="<?php echo url('/admin/subscribers?action=delete&id=' . $s['id'] . '&token=' . csrf_token()); ?>" onclick="authConfirmDelete(this); return false;" data-label="<?php echo e($s['email']); ?>" class="px-2 py-1 text-xs text-red-500 hover:bg-red-50 rounded-lg">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; endif; ?>
