@@ -647,24 +647,95 @@ function render_pagination($pagination) {
 // ============================================
 
 /**
- * Send email (basic PHP mail, SMTP requires external library)
+ * Send email via SMTP (no external library required)
  */
 function send_email($to, $subject, $html_body, $from_name = null, $from_email = null) {
     if (!MAIL_ENABLED) {
-        error_log("Email would be sent to: $to | Subject: $subject");
-        return true; // Pretend success when mail is disabled
+        error_log("[Mail disabled] To: $to | Subject: $subject");
+        return true;
     }
-    
-    $from_name = $from_name ?? MAIL_FROM_NAME;
+
+    $from_name  = $from_name  ?? MAIL_FROM_NAME;
     $from_email = $from_email ?? MAIL_FROM_EMAIL;
-    
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: $from_name <$from_email>\r\n";
-    $headers .= "Reply-To: $from_email\r\n";
-    $headers .= "X-Mailer: PHP/" . phpversion();
-    
-    return mail($to, $subject, $html_body, $headers);
+    $host       = MAIL_HOST;
+    $port       = MAIL_PORT;
+    $user       = MAIL_USER;
+    $pass       = MAIL_PASS;
+    $enc        = strtolower(MAIL_ENCRYPTION); // 'tls', 'ssl', or ''
+
+    // Open TCP connection
+    $prefix = ($enc === 'ssl') ? 'ssl://' : '';
+    $socket = @fsockopen($prefix . $host, $port, $errno, $errstr, 15);
+    if (!$socket) {
+        error_log("[SMTP] Connect failed to $host:$port — $errstr ($errno)");
+        return false;
+    }
+
+    $read = function() use ($socket) {
+        $data = '';
+        while ($line = fgets($socket, 512)) {
+            $data .= $line;
+            if (substr($line, 3, 1) === ' ') break;
+        }
+        return $data;
+    };
+    $write = function($cmd) use ($socket) {
+        fputs($socket, $cmd . "\r\n");
+    };
+
+    $read(); // 220 greeting
+    $write('EHLO ' . (gethostname() ?: 'localhost'));
+    $read();
+
+    // Upgrade to TLS for STARTTLS connections (port 587)
+    if ($enc === 'tls') {
+        $write('STARTTLS');
+        $read();
+        if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+            error_log('[SMTP] STARTTLS failed');
+            fclose($socket);
+            return false;
+        }
+        $write('EHLO ' . (gethostname() ?: 'localhost'));
+        $read();
+    }
+
+    // Authenticate
+    $write('AUTH LOGIN');
+    $read();
+    $write(base64_encode($user));
+    $read();
+    $write(base64_encode($pass));
+    $auth = $read();
+    if (strpos($auth, '235') === false) {
+        error_log('[SMTP] Auth failed: ' . trim($auth));
+        fclose($socket);
+        return false;
+    }
+
+    // Envelope
+    $write("MAIL FROM:<$from_email>"); $read();
+    $write("RCPT TO:<$to>");           $read();
+    $write('DATA');                    $read();
+
+    // Headers + body
+    $enc_name    = '=?UTF-8?B?' . base64_encode($from_name) . '?=';
+    $enc_subject = '=?UTF-8?B?' . base64_encode($subject)   . '?=';
+    $msg  = "From: $enc_name <$from_email>\r\n";
+    $msg .= "To: <$to>\r\n";
+    $msg .= "Subject: $enc_subject\r\n";
+    $msg .= "MIME-Version: 1.0\r\n";
+    $msg .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $msg .= "\r\n";
+    // Escape lone dots per SMTP spec
+    $msg .= preg_replace('/^\./m', '..', $html_body);
+    $msg .= "\r\n.";
+    $write($msg);
+    $read();
+
+    $write('QUIT');
+    fclose($socket);
+    return true;
 }
 
 /**

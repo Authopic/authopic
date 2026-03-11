@@ -34,18 +34,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($product)) $errors[] = get_text('Please select a product.', 'እባክዎ ምርት ይምረጡ።');
 
         if (empty($errors)) {
-            $name = db_escape($name);
-            $email_esc = db_escape($email);
-            $phone = db_escape($phone);
-            $company_esc = db_escape($company);
-            $product_esc = db_escape($product);
-            $role_esc = db_escape($role);
-            $message_esc = db_escape($message);
+            // Split full name into first / last
+            $name_parts = array_filter(explode(' ', $name, 2));
+            $first_name = trim($name_parts[0] ?? $name);
+            $last_name  = trim($name_parts[1] ?? '');
 
-            db_query("INSERT INTO `demo_requests` (`name`, `email`, `phone`, `company`, `product_interest`, `role`, `company_size`, `preferred_date`, `preferred_time`, `message`, `created_at`) 
-                VALUES ('$name', '$email_esc', '$phone', '$company_esc', '$product_esc', '$role_esc', '" . db_escape($company_size) . "', '" . db_escape($preferred_date) . "', '" . db_escape($preferred_time) . "', '$message_esc', NOW())");
+            // Map product slug → ENUM('sms','erp','both')
+            $product_lower = strtolower($product);
+            if (strpos($product_lower, 'erp') !== false) {
+                $product_enum = 'erp';
+            } elseif (strpos($product_lower, 'sms') !== false || strpos($product_lower, 'school') !== false) {
+                $product_enum = 'sms';
+            } else {
+                $product_enum = 'both';
+            }
 
-            notify_admin('New Demo Request', "Name: $name\nEmail: $email\nPhone: $phone\nProduct: $product\nCompany: $company\nPreferred Date: $preferred_date $preferred_time");
+            // Map time slot labels → HH:MM:SS
+            $time_map = ['morning' => '09:00:00', 'afternoon' => '14:00:00', 'flexible' => '09:00:00'];
+            $preferred_time_val = $time_map[$preferred_time] ?? ($preferred_time ?: '09:00:00');
+            $preferred_date_val = !empty($preferred_date) ? $preferred_date : date('Y-m-d', strtotime('+3 days'));
+
+            // Pack extra info into notes
+            $notes_parts = [];
+            if (!empty($message))      $notes_parts[] = $message;
+            if (!empty($role))         $notes_parts[] = "Role: $role";
+            if (!empty($company_size)) $notes_parts[] = "Org size: $company_size";
+            if (!empty($product))      $notes_parts[] = "Product interest: $product";
+            $notes_text = implode("\n", $notes_parts);
+
+            $f  = db_escape($first_name);
+            $l  = db_escape($last_name);
+            $em = db_escape($email);
+            $ph = db_escape($phone);
+            $co = db_escape($company);
+            $pr = db_escape($product_enum);
+            $pd = db_escape($preferred_date_val);
+            $pt = db_escape($preferred_time_val);
+            $no = db_escape($notes_text);
+            $ip = db_escape(get_client_ip());
+
+            db_query("INSERT INTO `demo_requests` (`first_name`, `last_name`, `email`, `phone`, `company`, `product`, `preferred_date`, `preferred_time`, `notes`, `ip_address`, `status`, `created_at`)
+                VALUES ('$f', '$l', '$em', '$ph', '$co', '$pr', '$pd', '$pt', '$no', '$ip', 'pending', NOW())");
+
+            notify_admin('New Demo Request', "Name: $name\nEmail: $email\nPhone: $phone\nProduct: $product\nCompany: $company\nPreferred Date: $preferred_date_val $preferred_time");
 
             redirect('/thank-you/demo');
         }

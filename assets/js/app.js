@@ -1103,4 +1103,39 @@
         });
     });
 
+    // ============================================================
+    // NEWSLETTER SUBSCRIBE (footer form)
+    // ============================================================
+    window.handleNewsletter = function(e) {
+        e.preventDefault();
+        var form  = document.getElementById('newsletterForm');
+        var email = form.querySelector('input[name="email"]').value.trim();
+        var btn   = form.querySelector('button[type="submit"]');
+        if (!email) return false;
+
+        var originalHTML = btn.innerHTML;
+        btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>';
+        btn.disabled = true;
+
+        var body = new FormData();
+        body.append('email', email);
+        var csrf = form.querySelector('input[name="csrf_token"]');
+        if (csrf) body.append('csrf_token', csrf.value);
+
+        fetch('/api/newsletter', { method: 'POST', body: body })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    showToast(data.message || 'Subscribed successfully!', 'success', 'Subscribed!');
+                    form.querySelector('input[name="email"]').value = '';
+                } else {
+                    showToast(data.message || 'Something went wrong.', 'error', 'Error');
+                }
+            })
+            .catch(function() { showToast('Network error. Please try again.', 'error'); })
+            .finally(function() { btn.innerHTML = originalHTML; btn.disabled = false; });
+
+        return false;
+    };
+
 })();
