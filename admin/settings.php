@@ -17,11 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && post('action') === 'test_email') {
         . "<p>If you received this, your SMTP configuration is working correctly.</p>"
         . "<p style='font-size:12px;color:#94a3b8;margin-top:16px;'>Sent: " . date('Y-m-d H:i:s') . " UTC</p>"
         . "<p style='font-size:12px;color:#94a3b8;'>Host: " . htmlspecialchars(MAIL_HOST, ENT_QUOTES) . ":" . MAIL_PORT . " / User: " . htmlspecialchars(MAIL_USER, ENT_QUOTES) . "</p>");
-    $ok = send_email($test_to, 'SMTP Test — ' . $site_name, $html);
+    $ok  = send_email($test_to, 'SMTP Test — ' . $site_name, $html);
+    $err = get_last_smtp_error();
     if ($ok) {
         set_flash('success', "Test email sent to $test_to — check your inbox (and spam folder).");
     } else {
-        set_flash('error', 'SMTP send failed. Check your PHP error log for details (search for [SMTP]).');
+        set_flash('error', 'SMTP failed: ' . ($err ?: 'Unknown error — check PHP error_log for [SMTP] entries.'));
     }
     redirect('/admin/settings');
 }

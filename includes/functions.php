@@ -647,12 +647,22 @@ function render_pagination($pagination) {
 // ============================================
 
 /**
+ * Returns the last SMTP error string (empty string if none).
+ */
+function get_last_smtp_error() {
+    return $GLOBALS['_smtp_last_error'] ?? '';
+}
+
+/**
  * Send email via SMTP (no external library required)
  */
 function send_email($to, $subject, $html_body, $from_name = null, $from_email = null) {
+    $GLOBALS['_smtp_last_error'] = '';
+
     if (!MAIL_ENABLED) {
+        $GLOBALS['_smtp_last_error'] = 'MAIL_ENABLED is false — email is disabled in config.';
         error_log("[Mail disabled] To: $to | Subject: $subject");
-        return true;
+        return false;
     }
 
     $from_name  = $from_name  ?? MAIL_FROM_NAME;
@@ -678,7 +688,8 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     $remote = ($enc === 'ssl') ? "ssl://$host:$port" : "tcp://$host:$port";
     $socket = @stream_socket_client($remote, $errno, $errstr, 15, STREAM_CLIENT_CONNECT, $ssl_ctx);
     if (!$socket) {
-        error_log("[SMTP] Connect failed to $remote — $errstr ($errno)");
+        $GLOBALS['_smtp_last_error'] = "Connect failed to $remote — $errstr (errno $errno)";
+        error_log('[SMTP] ' . $GLOBALS['_smtp_last_error']);
         return false;
     }
     stream_set_timeout($socket, 15);
@@ -712,7 +723,8 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
                 | (defined('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT') ? STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT : 0)
                 | (defined('STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT') ? STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT : 0);
         if (!stream_socket_enable_crypto($socket, true, $crypto)) {
-            error_log('[SMTP] STARTTLS failed');
+            $GLOBALS['_smtp_last_error'] = 'STARTTLS upgrade failed — server may not support TLS on this port.';
+            error_log('[SMTP] ' . $GLOBALS['_smtp_last_error']);
             fclose($socket);
             return false;
         }
@@ -728,7 +740,8 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     $write(base64_encode($pass));
     $auth = $read();
     if (strpos($auth, '235') === false) {
-        error_log('[SMTP] Auth failed: ' . trim($auth));
+        $GLOBALS['_smtp_last_error'] = 'Auth failed: ' . trim($auth);
+        error_log('[SMTP] ' . $GLOBALS['_smtp_last_error']);
         fclose($socket);
         return false;
     }
@@ -738,7 +751,8 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     $write("MAIL FROM:<$from_email>"); $read();
     $write("RCPT TO:<$to>");  $rcpt_resp = $read();
     if ($rcpt_resp && $rcpt_resp[0] >= '4') {
-        error_log('[SMTP] RCPT TO rejected: ' . trim($rcpt_resp));
+        $GLOBALS['_smtp_last_error'] = 'RCPT TO rejected: ' . trim($rcpt_resp);
+        error_log('[SMTP] ' . $GLOBALS['_smtp_last_error']);
         fclose($socket);
         return false;
     }
@@ -761,7 +775,8 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
     fputs($socket, $msg . "\r\n");
     $data_resp = $read();
     if ($data_resp && $data_resp[0] >= '4') {
-        error_log('[SMTP] DATA rejected: ' . trim($data_resp));
+        $GLOBALS['_smtp_last_error'] = 'DATA rejected: ' . trim($data_resp);
+        error_log('[SMTP] ' . $GLOBALS['_smtp_last_error']);
         fclose($socket);
         return false;
     }
