@@ -26,10 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
     $photo = trim(post('photo'));
     $email = trim(post('email'));
     $linkedin = trim(post('linkedin'));
-    $github = trim(post('github'));
-    $twitter = trim(post('twitter'));
     $sort_order = (int)post('sort_order');
-    $status = in_array(post('status'), ['active', 'inactive']) ? post('status') : 'active';
+    $is_active = post('status') === 'active' ? 1 : 0;
 
     $errors = [];
     if (empty($full_name)) $errors[] = 'Name is required.';
@@ -37,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
 
     if (empty($errors)) {
         $safe = [];
-        foreach (['full_name','role','bio','photo','email','linkedin','github','twitter'] as $f) {
+        foreach (['full_name','role','bio','photo','email','linkedin'] as $f) {
             $safe[$f] = db_escape($$f);
         }
 
@@ -47,12 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
         }
 
         if ($action === 'create') {
-            db_query("INSERT INTO team_members (full_name, role, bio, photo, email, linkedin, github, twitter, sort_order, status, created_at)
-                      VALUES ('{$safe['full_name']}', '{$safe['role']}', '{$safe['bio']}', '{$safe['photo']}', '{$safe['email']}', '{$safe['linkedin']}', '{$safe['github']}', '{$safe['twitter']}', $sort_order, '$status', NOW())");
+            db_query("INSERT INTO team_members (name_en, position_en, bio_en, photo, email, linkedin, sort_order, is_active)
+                      VALUES ('{$safe['full_name']}', '{$safe['role']}', '{$safe['bio']}', '{$safe['photo']}', '{$safe['email']}', '{$safe['linkedin']}', $sort_order, $is_active)");
             log_activity('create', 'team_members', db_insert_id(), 'Added team member: ' . $full_name);
             set_flash('success', 'Team member added.');
         } else {
-            db_query("UPDATE team_members SET full_name='{$safe['full_name']}', role='{$safe['role']}', bio='{$safe['bio']}', photo='{$safe['photo']}', email='{$safe['email']}', linkedin='{$safe['linkedin']}', github='{$safe['github']}', twitter='{$safe['twitter']}', sort_order=$sort_order, status='$status', updated_at=NOW() WHERE id=$id");
+            db_query("UPDATE team_members SET name_en='{$safe['full_name']}', position_en='{$safe['role']}', bio_en='{$safe['bio']}', photo='{$safe['photo']}', email='{$safe['email']}', linkedin='{$safe['linkedin']}', sort_order=$sort_order, is_active=$is_active, updated_at=NOW() WHERE id=$id");
             log_activity('update', 'team_members', $id, 'Updated team member: ' . $full_name);
             set_flash('success', 'Team member updated.');
         }
@@ -64,10 +62,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
 
 // ---- CREATE/EDIT FORM ----
 if (in_array($action, ['create', 'edit'])):
-    $item = ['full_name'=>'','role'=>'','bio'=>'','photo'=>'','email'=>'','linkedin'=>'','github'=>'','twitter'=>'','sort_order'=>0,'status'=>'active'];
+    $item = ['full_name'=>'','role'=>'','bio'=>'','photo'=>'','email'=>'','linkedin'=>'','sort_order'=>0,'is_active'=>1];
     if ($action === 'edit' && $id > 0) {
-        $item = db_fetch_one("SELECT * FROM team_members WHERE id=$id");
-        if (!$item) { set_flash('error', 'Member not found.'); redirect('/admin/team'); }
+        $row = db_fetch_one("SELECT * FROM team_members WHERE id=$id");
+        if (!$row) { set_flash('error', 'Member not found.'); redirect('/admin/team'); }
+        $item = [
+            'full_name'  => $row['name_en'],
+            'role'       => $row['position_en'],
+            'bio'        => $row['bio_en'],
+            'photo'      => $row['photo'],
+            'email'      => $row['email'],
+            'linkedin'   => $row['linkedin'],
+            'sort_order' => $row['sort_order'],
+            'is_active'  => $row['is_active'],
+        ];
     }
 ?>
 <div class="max-w-3xl">
@@ -120,30 +128,22 @@ if (in_array($action, ['create', 'edit'])):
 
         <div class="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl p-6 space-y-4">
             <h3 class="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider">Social Links</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="form-label">LinkedIn URL</label>
                     <input type="url" name="linkedin" value="<?php echo e($item['linkedin']); ?>" class="form-input" placeholder="https://linkedin.com/in/...">
-                </div>
-                <div>
-                    <label class="form-label">GitHub URL</label>
-                    <input type="url" name="github" value="<?php echo e($item['github']); ?>" class="form-input" placeholder="https://github.com/...">
-                </div>
-                <div>
-                    <label class="form-label">Twitter URL</label>
-                    <input type="url" name="twitter" value="<?php echo e($item['twitter']); ?>" class="form-input" placeholder="https://twitter.com/...">
                 </div>
             </div>
         </div>
 
         <div class="flex items-center gap-3">
-            <div>
-                <label class="form-label">Status</label>
-                <select name="status" class="form-input">
-                    <option value="active" <?php echo $item['status'] === 'active' ? 'selected' : ''; ?>>Active</option>
-                    <option value="inactive" <?php echo $item['status'] === 'inactive' ? 'selected' : ''; ?>>Inactive</option>
-                </select>
-            </div>
+                <div>
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-input">
+                        <option value="active" <?php echo $item['is_active'] ? 'selected' : ''; ?>>Active</option>
+                        <option value="inactive" <?php echo !$item['is_active'] ? 'selected' : ''; ?>>Inactive</option>
+                    </select>
+                </div>
         </div>
 
         <div class="flex items-center gap-3">
@@ -177,13 +177,13 @@ $items = db_fetch_all("SELECT * FROM team_members ORDER BY sort_order ASC, creat
                 <img src="<?php echo upload_url($m['photo']); ?>" class="w-20 h-20 rounded-full object-cover mx-auto mb-3">
             <?php else: ?>
                 <div class="w-20 h-20 rounded-full bg-primary mx-auto mb-3 flex items-center justify-center text-white text-2xl font-bold">
-                    <?php echo strtoupper(substr($m['full_name'] ?? $m['name_en'] ?? '?', 0, 1)); ?>
+                    <?php echo strtoupper(substr($m['name_en'] ?? '?', 0, 1)); ?>
                 </div>
             <?php endif; ?>
-            <h3 class="font-bold text-slate-700 dark:text-gray-200"><?php echo e($m['full_name']); ?></h3>
-            <p class="text-xs text-primary mb-2"><?php echo e($m['role']); ?></p>
-            <?php $c = $m['status'] === 'active' ? 'green' : 'slate'; ?>
-            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $c; ?>-100 text-<?php echo $c; ?>-600 mb-3 inline-block"><?php echo ucfirst($m['status']); ?></span>
+            <h3 class="font-bold text-slate-700 dark:text-gray-200"><?php echo e($m['name_en']); ?></h3>
+            <p class="text-xs text-primary mb-2"><?php echo e($m['position_en']); ?></p>
+            <?php $c = $m['is_active'] ? 'green' : 'slate'; ?>
+            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $c; ?>-100 text-<?php echo $c; ?>-600 mb-3 inline-block"><?php echo $m['is_active'] ? 'Active' : 'Inactive'; ?></span>
             <div class="flex justify-center gap-2 mt-3">
                 <a href="<?php echo url('/admin/team?action=edit&id=' . $m['id']); ?>" class="px-3 py-1 text-xs text-primary bg-blue-50 dark:bg-blue-500/10 rounded-lg hover:bg-blue-100">Edit</a>
                 <a href="<?php echo url('/admin/team?action=delete&id=' . $m['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="px-3 py-1 text-xs text-red-500 bg-red-50 dark:bg-red-500/10 rounded-lg hover:bg-red-100">Delete</a>

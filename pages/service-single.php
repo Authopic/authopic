@@ -21,9 +21,8 @@ $offerings = get_json($service['offerings']);
 $technologies = get_json($service['technologies']);
 $process = get_json($service['process_steps'] ?? null);
 
-// Related portfolio items
-$service_id = (int) $service['id'];
-$related_portfolio = db_fetch_all("SELECT * FROM `portfolio` WHERE `service_id` = $service_id AND `status` = 'published' ORDER BY `completion_date` DESC LIMIT 4");
+// Related portfolio items (matched by service type/slug)
+$related_portfolio = db_fetch_all("SELECT * FROM `portfolio` WHERE `status` = 'published' ORDER BY `is_featured` DESC, `completion_date` DESC LIMIT 4");
 
 require_once BASE_PATH . '/includes/header.php';
 ?>
@@ -185,8 +184,8 @@ require_once BASE_PATH . '/includes/header.php';
             <?php foreach ($related_portfolio as $item): ?>
             <a href="<?php echo url('/portfolio/' . $item['slug']); ?>" class="group block bg-white dark:bg-white/[0.03] rounded-2xl border border-black/5 dark:border-white/5 overflow-hidden hover:shadow-xl transition-all duration-500" data-animate="slide-up">
                 <div class="aspect-video bg-secondary/10">
-                    <?php if ($item['thumbnail']): ?>
-                    <img src="<?php echo upload_url($item['thumbnail']); ?>" alt="<?php echo e($item['title_en']); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <?php if ($item['featured_image']): ?>
+                    <img src="<?php echo upload_url($item['featured_image']); ?>" alt="<?php echo e($item['title_en']); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     <?php endif; ?>
                 </div>
                 <div class="p-6">

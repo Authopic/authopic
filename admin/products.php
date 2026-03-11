@@ -30,15 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
     $name = trim(post('name'));
     $slug = trim(post('slug')) ?: create_slug($name);
     $tagline = trim(post('tagline'));
-    $short_description = trim(post('short_description'));
     $description = post('description');
-    $icon = trim(post('icon'));
     $features = post('features');
-    $user_types = post('user_types');
     $pricing = post('pricing');
     $faq = post('faq');
-    $demo_url = trim(post('demo_url'));
-    $status = in_array(post('status'), ['draft', 'active', 'archived']) ? post('status') : 'draft';
+    $status = in_array(post('status'), ['draft', 'published', 'archived']) ? post('status') : 'draft';
 
     $errors = [];
     if (empty($name))
@@ -49,18 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
 
     if (empty($errors)) {
         $safe = [];
-        foreach (['name', 'slug', 'tagline', 'short_description', 'description', 'icon', 'features', 'user_types', 'pricing', 'faq', 'demo_url'] as $f) {
+        foreach (['name', 'slug', 'tagline', 'description', 'features', 'pricing', 'faq'] as $f) {
             $safe[$f] = db_escape($$f);
         }
 
         if ($action === 'create') {
-            db_query("INSERT INTO products (name, slug, tagline, short_description, description, icon, features, user_types, pricing, faq, demo_url, status, created_at)
-                      VALUES ('{$safe['name']}', '{$safe['slug']}', '{$safe['tagline']}', '{$safe['short_description']}', '{$safe['description']}', '{$safe['icon']}', '{$safe['features']}', '{$safe['user_types']}', '{$safe['pricing']}', '{$safe['faq']}', '{$safe['demo_url']}', '$status', NOW())");
+            db_query("INSERT INTO products (name_en, slug, tagline_en, description_en, features, pricing_tiers, faq, status)
+                      VALUES ('{$safe['name']}', '{$safe['slug']}', '{$safe['tagline']}', '{$safe['description']}', '{$safe['features']}', '{$safe['pricing']}', '{$safe['faq']}', '$status')");
             log_activity('create', 'products', db_insert_id(), 'Created product: ' . $name);
             set_flash('success', 'Product created.');
         }
         else {
-            db_query("UPDATE products SET name='{$safe['name']}', slug='{$safe['slug']}', tagline='{$safe['tagline']}', short_description='{$safe['short_description']}', description='{$safe['description']}', icon='{$safe['icon']}', features='{$safe['features']}', user_types='{$safe['user_types']}', pricing='{$safe['pricing']}', faq='{$safe['faq']}', demo_url='{$safe['demo_url']}', status='$status', updated_at=NOW() WHERE id=$id");
+            db_query("UPDATE products SET name_en='{$safe['name']}', slug='{$safe['slug']}', tagline_en='{$safe['tagline']}', description_en='{$safe['description']}', features='{$safe['features']}', pricing_tiers='{$safe['pricing']}', faq='{$safe['faq']}', status='$status', updated_at=NOW() WHERE id=$id");
             log_activity('update', 'products', $id, 'Updated product: ' . $name);
             set_flash('success', 'Product updated.');
         }
@@ -73,13 +69,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
 
 // ---- CREATE/EDIT FORM ----
 if (in_array($action, ['create', 'edit'])):
-    $item = ['name' => '', 'slug' => '', 'tagline' => '', 'short_description' => '', 'description' => '', 'icon' => '', 'features' => '', 'user_types' => '', 'pricing' => '', 'faq' => '', 'demo_url' => '', 'status' => 'draft'];
+    $item = ['name' => '', 'slug' => '', 'tagline' => '', 'description' => '', 'features' => '', 'pricing' => '', 'faq' => '', 'status' => 'draft'];
     if ($action === 'edit' && $id > 0) {
-        $item = db_fetch_one("SELECT * FROM products WHERE id=$id");
-        if (!$item) {
+        $row = db_fetch_one("SELECT * FROM products WHERE id=$id");
+        if (!$row) {
             set_flash('error', 'Product not found.');
             redirect('/admin/products');
         }
+        $item = [
+            'name'        => $row['name_en'],
+            'slug'        => $row['slug'],
+            'tagline'     => $row['tagline_en'],
+            'description' => $row['description_en'],
+            'features'    => $row['features'],
+            'pricing'     => $row['pricing_tiers'],
+            'faq'         => $row['faq'],
+            'status'      => $row['status'],
+        ];
     }
 ?>
 <div class="max-w-4xl">
@@ -103,16 +109,12 @@ if (in_array($action, ['create', 'edit'])):
             </div>
             <script>generateSlug('prod-name', 'prod-slug');</script>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="form-label">Icon (SVG or class)</label>
-                    <input type="text" name="icon" value="<?php echo e($item['icon']); ?>" class="form-input" placeholder="e.g. chat-bubble-left-right">
-                </div>
+            <div class="grid grid-cols-1 sm:grid-cols-1 gap-4">
                 <div>
                     <label class="form-label">Status</label>
                     <select name="status" class="form-input">
                         <option value="draft" <?php echo $item['status'] === 'draft' ? 'selected' : ''; ?>>Draft</option>
-                        <option value="active" <?php echo $item['status'] === 'active' ? 'selected' : ''; ?>>Active</option>
+                        <option value="published" <?php echo $item['status'] === 'published' ? 'selected' : ''; ?>>Published</option>
                         <option value="archived" <?php echo $item['status'] === 'archived' ? 'selected' : ''; ?>>Archived</option>
                     </select>
                 </div>
@@ -123,16 +125,8 @@ if (in_array($action, ['create', 'edit'])):
                 <input type="text" name="tagline" value="<?php echo e($item['tagline']); ?>" class="form-input" maxlength="200">
             </div>
             <div>
-                <label class="form-label">Short Description</label>
-                <textarea name="short_description" rows="2" class="form-input" maxlength="500"><?php echo e($item['short_description']); ?></textarea>
-            </div>
-            <div>
                 <label class="form-label">Full Description (HTML)</label>
                 <textarea name="description" rows="8" class="form-input font-mono text-sm"><?php echo e($item['description']); ?></textarea>
-            </div>
-            <div>
-                <label class="form-label">Demo URL</label>
-                <input type="url" name="demo_url" value="<?php echo e($item['demo_url']); ?>" class="form-input" placeholder="https://demo.authopic.com/...">
             </div>
         </div>
 
@@ -144,11 +138,7 @@ if (in_array($action, ['create', 'edit'])):
                 <textarea name="features" rows="6" class="form-input font-mono text-sm" placeholder='[{"title":"Feature Name","desc":"Description","icon":"icon-name"}]'><?php echo e($item['features']); ?></textarea>
             </div>
             <div>
-                <label class="form-label">User Types (JSON Array)</label>
-                <textarea name="user_types" rows="4" class="form-input font-mono text-sm" placeholder='[{"title":"Type","desc":"Description"}]'><?php echo e($item['user_types']); ?></textarea>
-            </div>
-            <div>
-                <label class="form-label">Pricing (JSON Array)</label>
+                <label class="form-label">Pricing Tiers (JSON Array)</label>
                 <textarea name="pricing" rows="6" class="form-input font-mono text-sm" placeholder='[{"plan":"Basic","monthly":99,"annual":79,"features":["Feature 1"]}]'><?php echo e($item['pricing']); ?></textarea>
             </div>
             <div>
@@ -196,10 +186,10 @@ else: // LIST
     else:
         foreach ($items as $p): ?>
                     <tr class="hover:bg-slate-50 dark:hover:bg-white/5">
-                        <td class="px-4 py-3 font-semibold text-slate-700 dark:text-gray-200"><?php echo e($p['name']); ?></td>
+                        <td class="px-4 py-3 font-semibold text-slate-700 dark:text-gray-200"><?php echo e($p['name_en']); ?></td>
                         <td class="px-4 py-3 text-slate-500"><?php echo e(truncate($p['tagline'], 50)); ?></td>
                         <td class="px-4 py-3">
-                            <?php $c = ['active' => 'green', 'draft' => 'orange', 'archived' => 'slate'][$p['status']] ?? 'slate'; ?>
+                            <?php $c = ['published' => 'green', 'draft' => 'orange', 'archived' => 'slate'][$p['status']] ?? 'slate'; ?>
                             <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $c; ?>-100 dark:bg-<?php echo $c; ?>-500/10 text-<?php echo $c; ?>-600"><?php echo ucfirst($p['status']); ?></span>
                         </td>
                         <td class="px-4 py-3 text-slate-500"><?php echo number_format($p['views']); ?></td>

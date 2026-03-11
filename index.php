@@ -6,6 +6,8 @@
  * ============================================
  */
 
+ob_start();
+
 // Define base path
 define('BASE_PATH', __DIR__);
 

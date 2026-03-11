@@ -18,18 +18,12 @@ $where = "p.`status` = 'published'";
 if ($filter_type) {
     $where .= " AND p.`type` = '" . db_escape($filter_type) . "'";
 }
-if ($filter_service) {
-    $where .= " AND p.`service_id` = " . (int) $filter_service;
-}
 
 $total = db_count("SELECT COUNT(*) FROM `portfolio` p WHERE $where");
 $pagination = paginate($total, $per_page, $current_page);
 $offset = ($current_page - 1) * $per_page;
 
-$items = db_fetch_all("SELECT p.*, s.name_en as service_name FROM `portfolio` p LEFT JOIN `services` s ON p.service_id = s.id WHERE $where ORDER BY p.`is_featured` DESC, p.`completion_date` DESC LIMIT $per_page OFFSET $offset");
-
-// Get unique types and services for filters
-$services = db_fetch_all("SELECT id, name_en, name_am FROM `services` WHERE `status` = 'published' ORDER BY `sort_order`");
+$items = db_fetch_all("SELECT * FROM `portfolio` p WHERE $where ORDER BY p.`is_featured` DESC, p.`completion_date` DESC LIMIT $per_page OFFSET $offset");
 
 require_once BASE_PATH . '/includes/header.php';
 ?>
@@ -62,7 +56,7 @@ require_once BASE_PATH . '/includes/header.php';
             <a href="<?php echo url('/portfolio?type=erp'); ?>" class="px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 <?php echo $filter_type === 'erp' ? 'bg-primary text-white border-primary shadow-lg shadow-primary/25' : 'bg-white dark:bg-white/5 text-slate-600 dark:text-gray-300 border-black/5 dark:border-white/10 hover:border-primary/30'; ?>">
                 ERP
             </a>
-            <?php foreach ($services as $svc): ?>
+            <?php foreach ([] as $svc): ?>
             <a href="<?php echo url('/portfolio?service=' . $svc['id']); ?>" class="px-5 py-2.5 rounded-xl text-sm font-medium border transition-all duration-300 <?php echo $filter_service == $svc['id'] ? 'bg-primary text-white border-primary shadow-lg shadow-primary/25' : 'bg-white dark:bg-white/5 text-slate-600 dark:text-gray-300 border-black/5 dark:border-white/10 hover:border-primary/30'; ?>">
                 <?php echo e(get_text($svc['name_en'], $svc['name_am'])); ?>
             </a>
@@ -98,8 +92,8 @@ require_once BASE_PATH . '/includes/header.php';
                 <div class="p-6">
                     <div class="flex items-center gap-2 mb-3">
                         <span class="px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full"><?php echo e(strtoupper($item['type'])); ?></span>
-                        <?php if ($item['service_name']): ?>
-                        <span class="px-2.5 py-1 bg-secondary/10 text-secondary text-xs font-medium rounded-full"><?php echo e($item['service_name']); ?></span>
+                        <?php if (!empty($item['industry'])): ?>
+                        <span class="px-2.5 py-1 bg-secondary/10 text-secondary text-xs font-medium rounded-full"><?php echo e($item['industry']); ?></span>
                         <?php endif; ?>
                     </div>
                     <h3 class="text-lg font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors mb-2">

@@ -7,6 +7,8 @@ if (!defined('BASE_PATH'))
 
 $footer_nav = get_nav_menu('footer');
 $year = date('Y');
+$_footer_products = db_fetch_all("SELECT `name_en`, `name_am`, `slug` FROM `products` WHERE `status` = 'published' ORDER BY `sort_order` ASC");
+$_footer_services = db_fetch_all("SELECT `name_en`, `name_am`, `slug` FROM `services` WHERE `status` = 'published' ORDER BY `sort_order` ASC");
 ?>
     </main>
 
@@ -81,10 +83,12 @@ endif; ?>
                         <?php echo get_text('Solutions', 'መፍትሔዎች'); ?>
                     </h4>
                     <ul class="space-y-3">
-                        <li><a href="<?php echo url('/products/sms'); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"><?php echo get_text('School Management', 'የትምህርት ቤት አስተዳደር'); ?></a></li>
-                        <li><a href="<?php echo url('/products/erp'); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"><?php echo get_text('ERP System', 'ኢአርፒ ሲስተም'); ?></a></li>
-                        <li><a href="<?php echo url('/services/website-development'); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"><?php echo get_text('Website Development', 'ዌብሳይት ልማት'); ?></a></li>
-                        <li><a href="<?php echo url('/services/web-application-development'); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"><?php echo get_text('Web App Development', 'ዌብ አፕ ልማት'); ?></a></li>
+                        <?php foreach ($_footer_products as $_fp): ?>
+                        <li><a href="<?php echo url('/products/' . $_fp['slug']); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"><?php echo e(get_text($_fp['name_en'], $_fp['name_am'] ?? '')); ?></a></li>
+                        <?php endforeach; ?>
+                        <?php foreach ($_footer_services as $_fs): ?>
+                        <li><a href="<?php echo url('/services/' . $_fs['slug']); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors"><?php echo e(get_text($_fs['name_en'], $_fs['name_am'] ?? '')); ?></a></li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
                 

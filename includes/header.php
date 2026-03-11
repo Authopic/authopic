@@ -13,6 +13,21 @@ $body_class = $body_class ?? '';
 $lang = current_lang();
 $nav_items = get_nav_menu('header');
 $nav_tree = build_menu_tree($nav_items);
+
+// Inject live services & products so nav always reflects admin changes
+$_live_services = db_fetch_all("SELECT `name_en`, `name_am`, `slug` FROM `services` WHERE `status` = 'published' ORDER BY `sort_order` ASC");
+$_live_products = db_fetch_all("SELECT `name_en`, `name_am`, `slug` FROM `products` WHERE `status` = 'published' ORDER BY `sort_order` ASC");
+foreach ($nav_tree as &$_nav_item) {
+    if ($_nav_item['url'] === '#') {
+        $_label = strtolower($_nav_item['label_en']);
+        if (strpos($_label, 'service') !== false && !empty($_live_services)) {
+            $_nav_item['children'] = array_map(fn($s) => ['label_en' => $s['name_en'], 'label_am' => $s['name_am'] ?? '', 'url' => '/services/' . $s['slug'], 'children' => []], $_live_services);
+        } elseif (strpos($_label, 'product') !== false && !empty($_live_products)) {
+            $_nav_item['children'] = array_map(fn($p) => ['label_en' => $p['name_en'], 'label_am' => $p['name_am'] ?? '', 'url' => '/products/' . $p['slug'], 'children' => []], $_live_products);
+        }
+    }
+}
+unset($_nav_item);
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $lang; ?>" class="scroll-smooth" data-theme="dark">

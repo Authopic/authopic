@@ -5,7 +5,7 @@
 if (!defined('BASE_PATH')) exit;
 
 $slug = db_escape($route_params['slug'] ?? '');
-$project = db_fetch_one("SELECT p.*, s.name_en as service_name, s.name_am as service_name_am, s.slug as service_slug FROM `portfolio` p LEFT JOIN `services` s ON p.service_id = s.id WHERE p.slug = '$slug' AND p.status = 'published'");
+$project = db_fetch_one("SELECT * FROM `portfolio` WHERE `slug` = '$slug' AND `status` = 'published'");
 
 if (!$project) {
     http_response_code(404);
@@ -45,8 +45,8 @@ require_once BASE_PATH . '/includes/header.php';
             <div>
                 <div class="flex items-center gap-2 mb-6">
                     <span class="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full"><?php echo e(strtoupper($project['type'])); ?></span>
-                    <?php if ($project['service_name']): ?>
-                    <a href="<?php echo url('/services/' . $project['service_slug']); ?>" class="px-3 py-1 bg-secondary/10 text-secondary text-sm font-medium rounded-full hover:bg-secondary/20 transition-colors"><?php echo e(get_text($project['service_name'], $project['service_name_am'])); ?></a>
+                    <?php if (!empty($project['industry'])): ?>
+                    <span class="px-3 py-1 bg-secondary/10 text-secondary text-sm font-medium rounded-full"><?php echo e($project['industry']); ?></span>
                     <?php endif; ?>
                 </div>
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800 dark:text-white mb-6 leading-tight">

@@ -61,14 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
         }
 
         if ($action === 'create') {
-            $read_time = max(1, (int)(str_word_count(strip_tags($content)) / 200));
-            db_query("INSERT INTO blog_posts (title, slug, excerpt, content, category_id, author_id, featured_image, tags, status, read_time, meta_title, meta_description, created_at) 
-                      VALUES ('{$safe['title']}', '{$safe['slug']}', '{$safe['excerpt']}', '{$safe['content']}', $category_id, $admin_id, '{$safe['featured_image']}', '{$safe['tags']}', '$status', $read_time, '{$safe['meta_title']}', '{$safe['meta_description']}', NOW())");
+            $publish_date = ($status === 'published') ? 'NOW()' : 'NULL';
+            db_query("INSERT INTO blog_posts (title_en, slug, excerpt_en, content_en, category_id, author_id, featured_image, tags, status, publish_date, meta_title, meta_description) 
+                      VALUES ('{$safe['title']}', '{$safe['slug']}', '{$safe['excerpt']}', '{$safe['content']}', $category_id, $admin_id, '{$safe['featured_image']}', '{$safe['tags']}', '$status', $publish_date, '{$safe['meta_title']}', '{$safe['meta_description']}')");
             log_activity('create', 'blog_posts', db_insert_id(), 'Created blog post: ' . $title);
             set_flash('success', 'Blog post created.');
         } else {
-            $read_time = max(1, (int)(str_word_count(strip_tags($content)) / 200));
-            db_query("UPDATE blog_posts SET title='{$safe['title']}', slug='{$safe['slug']}', excerpt='{$safe['excerpt']}', content='{$safe['content']}', category_id=$category_id, featured_image='{$safe['featured_image']}', tags='{$safe['tags']}', status='$status', read_time=$read_time, meta_title='{$safe['meta_title']}', meta_description='{$safe['meta_description']}', updated_at=NOW() WHERE id=$id");
+            $publish_date_sql = ($status === 'published') ? ", publish_date=NOW()" : '';
+            db_query("UPDATE blog_posts SET title_en='{$safe['title']}', slug='{$safe['slug']}', excerpt_en='{$safe['excerpt']}', content_en='{$safe['content']}', category_id=$category_id, featured_image='{$safe['featured_image']}', tags='{$safe['tags']}', status='$status'$publish_date_sql, meta_title='{$safe['meta_title']}', meta_description='{$safe['meta_description']}', updated_at=NOW() WHERE id=$id");
             log_activity('update', 'blog_posts', $id, 'Updated blog post: ' . $title);
             set_flash('success', 'Blog post updated.');
         }
@@ -78,11 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
     }
 }
 
-$categories = db_fetch_all("SELECT * FROM blog_categories ORDER BY name ASC");
+$categories = db_fetch_all("SELECT * FROM blog_categories ORDER BY name_en ASC");
 
 // ---- CREATE/EDIT FORM ----
 if (in_array($action, ['create', 'edit'])):
-    $post = ['title'=>'','slug'=>'','excerpt'=>'','content'=>'','category_id'=>0,'featured_image'=>'','tags'=>'','status'=>'draft','meta_title'=>'','meta_description'=>''];
+    $post = ['title_en'=>'','slug'=>'','excerpt_en'=>'','content_en'=>'','category_id'=>0,'featured_image'=>'','tags'=>'','status'=>'draft','meta_title'=>'','meta_description'=>''];
     if ($action === 'edit' && $id > 0) {
         $post = db_fetch_one("SELECT * FROM blog_posts WHERE id=$id");
         if (!$post) { set_flash('error', 'Post not found.'); redirect('/admin/blog'); }
@@ -102,7 +102,7 @@ if (in_array($action, ['create', 'edit'])):
         <div class="bg-white/60 dark:bg-white/5 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl p-6 space-y-4">
             <div>
                 <label class="form-label">Title *</label>
-                <input type="text" name="title" id="post-title" value="<?php echo e($post['title']); ?>" required class="form-input">
+                <input type="text" name="title" id="post-title" value="<?php echo e($post['title_en']); ?>" required class="form-input">
             </div>
             <div>
                 <label class="form-label">Slug</label>
@@ -116,7 +116,7 @@ if (in_array($action, ['create', 'edit'])):
                     <select name="category_id" class="form-input">
                         <option value="0">Uncategorized</option>
                         <?php foreach ($categories as $cat): ?>
-                            <option value="<?php echo $cat['id']; ?>" <?php echo (int)$post['category_id'] === (int)$cat['id'] ? 'selected' : ''; ?>><?php echo e($cat['name']); ?></option>
+                            <option value="<?php echo $cat['id']; ?>" <?php echo (int)$post['category_id'] === (int)$cat['id'] ? 'selected' : ''; ?>><?php echo e($cat['name_en']); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -132,7 +132,7 @@ if (in_array($action, ['create', 'edit'])):
 
             <div>
                 <label class="form-label">Excerpt</label>
-                <textarea name="excerpt" rows="2" class="form-input" maxlength="500"><?php echo e($post['excerpt']); ?></textarea>
+                <textarea name="excerpt" rows="2" class="form-input" maxlength="500"><?php echo e($post['excerpt_en']); ?></textarea>
             </div>
 
             <div>
@@ -147,7 +147,7 @@ if (in_array($action, ['create', 'edit'])):
                     <button type="button" onclick="insertTag('post-content','<ul>\n<li>','</li>\n</ul>')" class="px-2 py-1 text-xs bg-slate-100 dark:bg-white/5 rounded">UL</button>
                     <button type="button" onclick="insertTag('post-content','<blockquote>','</blockquote>')" class="px-2 py-1 text-xs bg-slate-100 dark:bg-white/5 rounded">Quote</button>
                 </div>
-                <textarea name="content" id="post-content" rows="15" required class="form-input font-mono text-sm"><?php echo e($post['content']); ?></textarea>
+                <textarea name="content" id="post-content" rows="15" required class="form-input font-mono text-sm"><?php echo e($post['content_en']); ?></textarea>
             </div>
 
             <div>
@@ -195,7 +195,7 @@ $status_filter = get('status') ?: '';
 $where = $status_filter ? "WHERE bp.status='" . db_escape($status_filter) . "'" : '';
 $total = db_fetch_one("SELECT COUNT(*) as c FROM blog_posts bp $where")['c'] ?? 0;
 $pagination = paginate($total, 20);
-$posts = db_fetch_all("SELECT bp.*, bc.name as category_name, au.full_name as author_name FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.category_id=bc.id LEFT JOIN admin_users au ON bp.author_id=au.id $where ORDER BY bp.created_at DESC LIMIT {$pagination['offset']}, {$pagination['per_page']}");
+$posts = db_fetch_all("SELECT bp.*, bc.name_en as category_name, au.full_name as author_name FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.category_id=bc.id LEFT JOIN admin_users au ON bp.author_id=au.id $where ORDER BY bp.created_at DESC LIMIT {$pagination['offset']}, {$pagination['per_page']}");
 ?>
 
 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -230,7 +230,7 @@ $posts = db_fetch_all("SELECT bp.*, bc.name as category_name, au.full_name as au
                 <?php else: foreach ($posts as $p): ?>
                     <tr class="hover:bg-slate-50 dark:hover:bg-white/5">
                         <td class="px-4 py-3">
-                            <div class="font-semibold text-slate-700 dark:text-gray-200"><?php echo e(truncate($p['title'], 50)); ?></div>
+                            <div class="font-semibold text-slate-700 dark:text-gray-200"><?php echo e(truncate($p['title_en'], 50)); ?></div>
                             <div class="text-xs text-slate-400">by <?php echo e($p['author_name'] ?: 'Admin'); ?></div>
                         </td>
                         <td class="px-4 py-3 text-slate-500"><?php echo e($p['category_name'] ?: '—'); ?></td>

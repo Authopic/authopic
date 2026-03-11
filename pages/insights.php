@@ -116,7 +116,7 @@ require_once BASE_PATH . '/includes/header.php';
                         <span>·</span>
                         <span><?php echo format_date($featured['publish_date']); ?></span>
                         <span>·</span>
-                        <span><?php echo $featured['read_time']; ?> min read</span>
+                        <span><?php echo $featured['read_time'] ?? max(1, (int)ceil(str_word_count(strip_tags($featured['content_en'] ?? '')) / 200)); ?> min read</span>
                     </div>
                 </div>
             </div>
@@ -154,7 +154,7 @@ require_once BASE_PATH . '/includes/header.php';
                     </p>
                     <div class="flex items-center justify-between text-xs text-slate-400">
                         <span><?php echo format_date($post['publish_date']); ?></span>
-                        <span><?php echo $post['read_time']; ?> min read</span>
+                        <span><?php echo max(1, (int)ceil(str_word_count(strip_tags($post['content_en'] ?? '')) / 200)); ?> min read</span>
                     </div>
                 </div>
             </a>

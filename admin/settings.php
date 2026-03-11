@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($existing) {
             db_query("UPDATE site_settings SET setting_value='$val', updated_at=NOW() WHERE setting_key='$safe_key'");
         } else {
-            db_query("INSERT INTO site_settings (setting_key, setting_value, created_at) VALUES ('$safe_key', '$val', NOW())");
+            db_query("INSERT INTO site_settings (setting_key, setting_value) VALUES ('$safe_key', '$val')");
         }
     }
 

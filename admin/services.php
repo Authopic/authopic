@@ -24,13 +24,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
     $slug = trim(post('slug')) ?: create_slug($title);
     $short_description = trim(post('short_description'));
     $description = post('description');
-    $icon = trim(post('icon'));
     $offerings = post('offerings');
     $technologies = post('technologies');
     $process = post('process');
-    $price_range = trim(post('price_range'));
-    $timeline = trim(post('timeline'));
-    $status = in_array(post('status'), ['draft', 'active', 'archived']) ? post('status') : 'draft';
+    $status = in_array(post('status'), ['draft', 'published', 'archived']) ? post('status') : 'draft';
 
     $errors = [];
     if (empty($title)) $errors[] = 'Title is required.';
@@ -39,17 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
 
     if (empty($errors)) {
         $safe = [];
-        foreach (['title','slug','short_description','description','icon','offerings','technologies','process','price_range','timeline'] as $f) {
+        foreach (['title','slug','short_description','description','offerings','technologies','process'] as $f) {
             $safe[$f] = db_escape($$f);
         }
 
         if ($action === 'create') {
-            db_query("INSERT INTO services (title, slug, short_description, description, icon, offerings, technologies, process, price_range, timeline, status, created_at)
-                      VALUES ('{$safe['title']}', '{$safe['slug']}', '{$safe['short_description']}', '{$safe['description']}', '{$safe['icon']}', '{$safe['offerings']}', '{$safe['technologies']}', '{$safe['process']}', '{$safe['price_range']}', '{$safe['timeline']}', '$status', NOW())");
+            db_query("INSERT INTO services (name_en, slug, tagline_en, description_en, offerings, technologies, process_steps, status)
+                      VALUES ('{$safe['title']}', '{$safe['slug']}', '{$safe['short_description']}', '{$safe['description']}', '{$safe['offerings']}', '{$safe['technologies']}', '{$safe['process']}', '$status')");
             log_activity('create', 'services', db_insert_id(), 'Created service: ' . $title);
             set_flash('success', 'Service created.');
         } else {
-            db_query("UPDATE services SET title='{$safe['title']}', slug='{$safe['slug']}', short_description='{$safe['short_description']}', description='{$safe['description']}', icon='{$safe['icon']}', offerings='{$safe['offerings']}', technologies='{$safe['technologies']}', process='{$safe['process']}', price_range='{$safe['price_range']}', timeline='{$safe['timeline']}', status='$status', updated_at=NOW() WHERE id=$id");
+            db_query("UPDATE services SET name_en='{$safe['title']}', slug='{$safe['slug']}', tagline_en='{$safe['short_description']}', description_en='{$safe['description']}', offerings='{$safe['offerings']}', technologies='{$safe['technologies']}', process_steps='{$safe['process']}', status='$status', updated_at=NOW() WHERE id=$id");
             log_activity('update', 'services', $id, 'Updated service: ' . $title);
             set_flash('success', 'Service updated.');
         }
@@ -61,10 +58,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
 
 // ---- CREATE/EDIT FORM ----
 if (in_array($action, ['create', 'edit'])):
-    $item = ['title'=>'','slug'=>'','short_description'=>'','description'=>'','icon'=>'','offerings'=>'','technologies'=>'','process'=>'','price_range'=>'','timeline'=>'','status'=>'draft'];
+    $item = ['title'=>'','slug'=>'','short_description'=>'','description'=>'','offerings'=>'','technologies'=>'','process'=>'','status'=>'draft'];
     if ($action === 'edit' && $id > 0) {
-        $item = db_fetch_one("SELECT * FROM services WHERE id=$id");
-        if (!$item) { set_flash('error', 'Service not found.'); redirect('/admin/services'); }
+        $row = db_fetch_one("SELECT * FROM services WHERE id=$id");
+        if (!$row) { set_flash('error', 'Service not found.'); redirect('/admin/services'); }
+        $item = [
+            'title'             => $row['name_en'],
+            'slug'              => $row['slug'],
+            'short_description' => $row['tagline_en'],
+            'description'       => $row['description_en'],
+            'offerings'         => $row['offerings'],
+            'technologies'      => $row['technologies'],
+            'process'           => $row['process_steps'],
+            'status'            => $row['status'],
+        ];
     }
 ?>
 <div class="max-w-4xl">
@@ -90,29 +97,21 @@ if (in_array($action, ['create', 'edit'])):
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                    <label class="form-label">Icon</label>
-                    <input type="text" name="icon" value="<?php echo e($item['icon']); ?>" class="form-input" placeholder="code-bracket">
-                </div>
-                <div>
-                    <label class="form-label">Price Range</label>
-                    <input type="text" name="price_range" value="<?php echo e($item['price_range']); ?>" class="form-input" placeholder="50,000 - 200,000 ETB">
+                    <label class="form-label">Slug</label>
+                    <input type="text" name="slug" id="svc-slug" value="<?php echo e($item['slug']); ?>" class="form-input">
                 </div>
                 <div>
                     <label class="form-label">Status</label>
                     <select name="status" class="form-input">
                         <option value="draft" <?php echo $item['status'] === 'draft' ? 'selected' : ''; ?>>Draft</option>
-                        <option value="active" <?php echo $item['status'] === 'active' ? 'selected' : ''; ?>>Active</option>
+                        <option value="published" <?php echo $item['status'] === 'published' ? 'selected' : ''; ?>>Published</option>
                         <option value="archived" <?php echo $item['status'] === 'archived' ? 'selected' : ''; ?>>Archived</option>
                     </select>
                 </div>
             </div>
 
             <div>
-                <label class="form-label">Timeline</label>
-                <input type="text" name="timeline" value="<?php echo e($item['timeline']); ?>" class="form-input" placeholder="2-4 weeks">
-            </div>
-            <div>
-                <label class="form-label">Short Description</label>
+                <label class="form-label">Short Description (Tagline)</label>
                 <textarea name="short_description" rows="2" class="form-input"><?php echo e($item['short_description']); ?></textarea>
             </div>
             <div>
@@ -166,7 +165,7 @@ $items = db_fetch_all("SELECT * FROM services ORDER BY sort_order ASC, created_a
         <table class="w-full text-sm">
             <thead><tr class="border-b border-black/5 dark:border-white/10">
                 <th class="px-4 py-3 text-left font-semibold text-slate-500">Service</th>
-                <th class="px-4 py-3 text-left font-semibold text-slate-500">Price Range</th>
+                <th class="px-4 py-3 text-left font-semibold text-slate-500">Views</th>
                 <th class="px-4 py-3 text-left font-semibold text-slate-500">Status</th>
                 <th class="px-4 py-3 text-right font-semibold text-slate-500">Actions</th>
             </tr></thead>
@@ -176,12 +175,12 @@ $items = db_fetch_all("SELECT * FROM services ORDER BY sort_order ASC, created_a
                 <?php else: foreach ($items as $s): ?>
                     <tr class="hover:bg-slate-50 dark:hover:bg-white/5">
                         <td class="px-4 py-3">
-                            <div class="font-semibold text-slate-700 dark:text-gray-200"><?php echo e($s['title']); ?></div>
-                            <div class="text-xs text-slate-400"><?php echo e(truncate($s['short_description'], 60)); ?></div>
+                            <div class="font-semibold text-slate-700 dark:text-gray-200"><?php echo e($s['name_en']); ?></div>
+                            <div class="text-xs text-slate-400"><?php echo e(truncate($s['tagline_en'], 60)); ?></div>
                         </td>
-                        <td class="px-4 py-3 text-slate-500"><?php echo e($s['price_range'] ?: '—'); ?></td>
+                        <td class="px-4 py-3 text-slate-500"><?php echo number_format($s['views']); ?></td>
                         <td class="px-4 py-3">
-                            <?php $c = ['active'=>'green','draft'=>'orange','archived'=>'slate'][$s['status']] ?? 'slate'; ?>
+                            <?php $c = ['published'=>'green','draft'=>'orange','archived'=>'slate'][$s['status']] ?? 'slate'; ?>
                             <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $c; ?>-100 dark:bg-<?php echo $c; ?>-500/10 text-<?php echo $c; ?>-600"><?php echo ucfirst($s['status']); ?></span>
                         </td>
                         <td class="px-4 py-3 text-right space-x-1">

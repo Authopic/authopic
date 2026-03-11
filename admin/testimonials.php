@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
     $rating = max(1, min(5, (int)post('rating')));
     $is_featured = post('is_featured') ? 1 : 0;
     $sort_order = (int)post('sort_order');
-    $status = in_array(post('status'), ['active', 'inactive']) ? post('status') : 'active';
+    $status = in_array(post('status'), ['pending', 'approved', 'rejected']) ? post('status') : 'pending';
 
     $errors = [];
     if (empty($client_name)) $errors[] = 'Client name is required.';
@@ -46,12 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
         }
 
         if ($action === 'create') {
-            db_query("INSERT INTO testimonials (client_name, client_role, company, content, photo, rating, is_featured, sort_order, status, created_at)
-                      VALUES ('{$safe['client_name']}', '{$safe['client_role']}', '{$safe['company']}', '{$safe['content']}', '{$safe['photo']}', $rating, $is_featured, $sort_order, '$status', NOW())");
+            db_query("INSERT INTO testimonials (client_name, client_position, company_name, quote_en, photo, rating, is_featured, sort_order, status)
+                      VALUES ('{$safe['client_name']}', '{$safe['client_role']}', '{$safe['company']}', '{$safe['content']}', '{$safe['photo']}', $rating, $is_featured, $sort_order, '$status')");
             log_activity('create', 'testimonials', db_insert_id(), 'Added testimonial from: ' . $client_name);
             set_flash('success', 'Testimonial added.');
         } else {
-            db_query("UPDATE testimonials SET client_name='{$safe['client_name']}', client_role='{$safe['client_role']}', company='{$safe['company']}', content='{$safe['content']}', photo='{$safe['photo']}', rating=$rating, is_featured=$is_featured, sort_order=$sort_order, status='$status', updated_at=NOW() WHERE id=$id");
+            db_query("UPDATE testimonials SET client_name='{$safe['client_name']}', client_position='{$safe['client_role']}', company_name='{$safe['company']}', quote_en='{$safe['content']}', photo='{$safe['photo']}', rating=$rating, is_featured=$is_featured, sort_order=$sort_order, status='$status', updated_at=NOW() WHERE id=$id");
             log_activity('update', 'testimonials', $id, 'Updated testimonial from: ' . $client_name);
             set_flash('success', 'Testimonial updated.');
         }
@@ -63,10 +63,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array($action, ['create', 'edit'
 
 // ---- CREATE/EDIT FORM ----
 if (in_array($action, ['create', 'edit'])):
-    $item = ['client_name'=>'','client_role'=>'','company'=>'','content'=>'','photo'=>'','rating'=>5,'is_featured'=>0,'sort_order'=>0,'status'=>'active'];
+    $item = ['client_name'=>'','client_role'=>'','company'=>'','content'=>'','photo'=>'','rating'=>5,'is_featured'=>0,'sort_order'=>0,'status'=>'pending'];
     if ($action === 'edit' && $id > 0) {
-        $item = db_fetch_one("SELECT * FROM testimonials WHERE id=$id");
-        if (!$item) { set_flash('error', 'Testimonial not found.'); redirect('/admin/testimonials'); }
+        $row = db_fetch_one("SELECT * FROM testimonials WHERE id=$id");
+        if (!$row) { set_flash('error', 'Testimonial not found.'); redirect('/admin/testimonials'); }
+        $item = [
+            'client_name' => $row['client_name'],
+            'client_role' => $row['client_position'],
+            'company'     => $row['company_name'],
+            'content'     => $row['quote_en'],
+            'photo'       => $row['photo'],
+            'rating'      => $row['rating'],
+            'is_featured' => $row['is_featured'],
+            'sort_order'  => $row['sort_order'],
+            'status'      => $row['status'],
+        ];
     }
 ?>
 <div class="max-w-3xl">
@@ -127,8 +138,9 @@ if (in_array($action, ['create', 'edit'])):
                 <div>
                     <label class="form-label">Status</label>
                     <select name="status" class="form-input">
-                        <option value="active" <?php echo $item['status'] === 'active' ? 'selected' : ''; ?>>Active</option>
-                        <option value="inactive" <?php echo $item['status'] === 'inactive' ? 'selected' : ''; ?>>Inactive</option>
+                        <option value="pending" <?php echo $item['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
+                        <option value="approved" <?php echo $item['status'] === 'approved' ? 'selected' : ''; ?>>Approved</option>
+                        <option value="rejected" <?php echo $item['status'] === 'rejected' ? 'selected' : ''; ?>>Rejected</option>
                     </select>
                 </div>
             </div>
@@ -181,14 +193,14 @@ $items = db_fetch_all("SELECT * FROM testimonials ORDER BY sort_order ASC, creat
                             <?php if ($t['is_featured']): ?><span class="ml-2 text-xs text-yellow-500">★ Featured</span><?php endif; ?>
                         </div>
                         <div class="flex items-center gap-2">
-                            <?php $sc = $t['status'] === 'active' ? 'green' : 'slate'; ?>
+                            <?php $sc = $t['status'] === 'approved' ? 'green' : ($t['status'] === 'rejected' ? 'red' : 'orange'); ?>
                             <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-<?php echo $sc; ?>-100 text-<?php echo $sc; ?>-600"><?php echo ucfirst($t['status']); ?></span>
                             <a href="<?php echo url('/admin/testimonials?action=edit&id=' . $t['id']); ?>" class="text-xs text-primary hover:underline">Edit</a>
                             <a href="<?php echo url('/admin/testimonials?action=delete&id=' . $t['id'] . '&token=' . csrf_token()); ?>" onclick="return confirmDelete()" class="text-xs text-red-500 hover:underline">Delete</a>
                         </div>
                     </div>
-                    <p class="text-xs text-slate-400 mb-2"><?php echo e($t['client_role']); ?><?php echo $t['company'] ? ' at ' . e($t['company']) : ''; ?></p>
-                    <p class="text-sm text-slate-600 dark:text-gray-300">"<?php echo e(truncate($t['content'], 200)); ?>"</p>
+                    <p class="text-xs text-slate-400 mb-2"><?php echo e($t['client_position']); ?><?php echo $t['company_name'] ? ' at ' . e($t['company_name']) : ''; ?></p>
+                    <p class="text-sm text-slate-600 dark:text-gray-300">"<?php echo e(truncate($t['quote_en'], 200)); ?>"</p>
                     <div class="mt-2 text-yellow-400 text-sm"><?php echo str_repeat('★', $t['rating']) . str_repeat('☆', 5 - $t['rating']); ?></div>
                 </div>
             </div>

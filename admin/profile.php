@@ -45,14 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($new_pass !== $confirm) $errors[] = 'Passwords do not match.';
 
         // Verify current password
-        $user = db_fetch_one("SELECT password FROM admin_users WHERE id=" . (int)$admin['id']);
-        if (!password_verify($current, $user['password'])) {
+        $user = db_fetch_one("SELECT password_hash FROM admin_users WHERE id=" . (int)$admin['id']);
+        if (!password_verify($current, $user['password_hash'])) {
             $errors[] = 'Current password is incorrect.';
         }
 
         if (empty($errors)) {
             $hash = password_hash($new_pass, PASSWORD_DEFAULT);
-            db_query("UPDATE admin_users SET password='$hash', updated_at=NOW() WHERE id=" . (int)$admin['id']);
+            db_query("UPDATE admin_users SET password_hash='$hash', updated_at=NOW() WHERE id=" . (int)$admin['id']);
             log_activity('update', 'admin_users', $admin['id'], 'Changed password');
             set_flash('success', 'Password changed successfully.');
         } else {
