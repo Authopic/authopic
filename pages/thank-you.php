@@ -1,4 +1,5 @@
 <?php
+// Developed by Yisak A. Alemayehu (yisak.dev)
 /**
  * Authopic Technologies PLC - Thank You Page (/thank-you/{type})
  */

@@ -1,3 +1,4 @@
+// Developed by Yisak A. Alemayehu (yisak.dev)
 /**
  * Authopic Technologies PLC - Service Worker v2.0
  * Professional caching strategies, offline fallback, background sync

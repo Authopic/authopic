@@ -1,4 +1,5 @@
 <?php
+// Developed by Yisak A. Alemayehu (yisak.dev)
 /**
  * Authopic Technologies PLC - Product Single Page (/products/sms, /products/erp)
  */

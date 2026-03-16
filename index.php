@@ -1,4 +1,5 @@
 <?php
+// Developed by Yisak A. Alemayehu (yisak.dev)
 /**
  * ============================================
  * Authopic Technologies PLC - Main Router / Front Controller
@@ -18,6 +19,18 @@ require_once BASE_PATH . '/includes/functions.php';
 // ============================================
 // Session Management
 // ============================================
+/**
+ * Initializes a secure session for the website.
+ *
+ * This code checks if a session has not already started. If not, it sets several security options:
+ * - Makes session cookies accessible only through HTTP (not JavaScript), which helps protect against certain attacks.
+ * - Enables strict mode, which prevents session fixation attacks by only allowing sessions with valid IDs.
+ * - Sets the cookie's "SameSite" attribute to "Lax", which helps prevent cross-site request forgery (CSRF) attacks.
+ * - Sets a custom name for the session.
+ * - Starts the session so the website can remember information about the user.
+ *
+ * These settings help keep your information safe while using the website.
+ */
 if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.cookie_httponly', 1);
     ini_set('session.use_strict_mode', 1);
@@ -42,6 +55,7 @@ $path = $request_uri;
 // ============================================
 // Route Matching
 // ============================================
+
 $route_file = null;
 $route_params = [];
 
