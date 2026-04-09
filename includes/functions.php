@@ -1,7 +1,7 @@
 <?php
 /**
  * ============================================
- * Authopic Technologies PLC - Helper Functions
+ * Melihik Technologies PLC - Helper Functions
  * Pure Procedural PHP - No OOP
  * ============================================
  */
@@ -795,7 +795,7 @@ function send_email($to, $subject, $html_body, $from_name = null, $from_email = 
  * Send notification to admin
  */
 function notify_admin($subject, $message) {
-    $admin_email = get_setting('site_email', 'admin@authopic.com');
+    $admin_email = get_setting('site_email', 'admin@Melihik.com');
     $html = email_template($subject, $message);
     return send_email($admin_email, $subject, $html);
 }
@@ -804,9 +804,9 @@ function notify_admin($subject, $message) {
  * Send a beautiful welcome email to a new newsletter subscriber
  */
 function send_welcome_email($to_email) {
-    $site_name  = get_setting('site_name', 'Authopic Technologies PLC');
+    $site_name  = get_setting('site_name', 'Melihik Technologies PLC');
     $site_url   = rtrim(SITE_URL, '/');
-    $site_email = get_setting('site_email', 'info@authopic.com');
+    $site_email = get_setting('site_email', 'info@Melihik.com');
     $site_phone = get_setting('site_phone', '+251 911 000 000');
 
     // Pull live published products
@@ -944,7 +944,7 @@ function send_welcome_email($to_email) {
  * Basic email template
  */
 function email_template($title, $content) {
-    $site_name = get_setting('site_name', 'Authopic Technologies PLC');
+    $site_name = get_setting('site_name', 'Melihik Technologies PLC');
     return '<!DOCTYPE html><html><head><meta charset="utf-8"><style>
         body{font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:20px;}
         .container{max-width:600px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.1);}

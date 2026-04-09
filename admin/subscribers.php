@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Newsletter Subscribers
+ * Melihik Technologies PLC - Admin: Newsletter Subscribers
  */
 if (!defined('BASE_PATH')) exit;
 
@@ -57,7 +57,7 @@ if ($action === 'send' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Build branded HTML body from admin plain-text input
-    $site_name = get_setting('site_name') ?: 'Authopic Technologies PLC';
+    $site_name = get_setting('site_name') ?: 'Melihik Technologies PLC';
     $site_url  = rtrim(defined('SITE_URL') ? SITE_URL : '', '/');
     $paragraphs = array_filter(array_map('trim', preg_split('/\n{2,}/', $body_input)));
     $body_html  = '';
@@ -198,7 +198,7 @@ $this_month = db_fetch_one("SELECT COUNT(*) as c FROM newsletter_subscribers WHE
 
         <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-1.5">Subject Line <span class="text-red-500">*</span></label>
-            <input type="text" name="subject" required placeholder="e.g. Exciting updates from Authopic!"
+            <input type="text" name="subject" required placeholder="e.g. Exciting updates from Melihik!"
                    class="w-full px-4 py-2.5 bg-slate-50 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50">
         </div>
 
@@ -207,7 +207,7 @@ $this_month = db_fetch_one("SELECT COUNT(*) as c FROM newsletter_subscribers WHE
             <p class="text-xs text-slate-400 mb-2">Write in plain text. Separate paragraphs with a blank line. The email will be wrapped in a professional branded template automatically.</p>
             <textarea name="body" required rows="14"
                       class="w-full px-4 py-3 bg-slate-50 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-xl text-sm text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 resize-y font-mono leading-relaxed"
-                      placeholder="Dear Subscriber,&#10;&#10;We have exciting news to share with you...&#10;&#10;Our latest update includes...&#10;&#10;Best regards,&#10;The Authopic Team"></textarea>
+                      placeholder="Dear Subscriber,&#10;&#10;We have exciting news to share with you...&#10;&#10;Our latest update includes...&#10;&#10;Best regards,&#10;The Melihik Team"></textarea>
         </div>
 
         <div class="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-4 text-sm text-amber-700 dark:text-amber-400">

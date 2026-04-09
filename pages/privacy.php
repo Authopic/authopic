@@ -1,14 +1,14 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Privacy Policy Page
+ * Melihik Technologies PLC - Privacy Policy Page
  */
 if (!defined('BASE_PATH'))
     exit;
 
 $page_title = get_text('Privacy Policy', 'የግላዊነት ፖሊሲ');
 require_once BASE_PATH . '/includes/header.php';
-$company = get_setting('company_name') ?: 'Authopic Technologies PLC';
+$company = get_setting('company_name') ?: 'Melihik Technologies PLC';
 ?>
 
 <section class="relative py-16 bg-slate-50 dark:bg-slate-900">
@@ -90,7 +90,7 @@ $company = get_setting('company_name') ?: 'Authopic Technologies PLC';
     'ስለዚህ የግላዊነት ፖሊሲ ጥያቄዎች ካሉዎት ያግኙን:'
 ); ?></p>
             <ul>
-                <li><strong><?php echo get_text('Email', 'ኢሜይል'); ?>:</strong> <?php echo e(get_setting('contact_email') ?: 'info@authopic.com'); ?></li>
+                <li><strong><?php echo get_text('Email', 'ኢሜይል'); ?>:</strong> <?php echo e(get_setting('contact_email') ?: 'info@Melihik.com'); ?></li>
                 <li><strong><?php echo get_text('Phone', 'ስልክ'); ?>:</strong> <?php echo e(get_setting('contact_phone') ?: '+251 91 234 5678'); ?></li>
                 <li><strong><?php echo get_text('Address', 'አድራሻ'); ?>:</strong> <?php echo e(get_setting('address') ?: 'Addis Ababa, Ethiopia'); ?></li>
             </ul>

@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Homepage
+ * Melihik Technologies PLC - Homepage
  */
 if (!defined('BASE_PATH'))
     exit;
@@ -52,7 +52,7 @@ require_once BASE_PATH . '/includes/header.php';
                 
                 <p class="text-lg sm:text-xl text-slate-500 dark:text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                     <?php echo get_text(
-    'Authopic Technologies PLC helps businesses grow through innovative web development, scalable software systems, and cutting-edge digital technologies.',
+    'Melihik Technologies PLC helps businesses grow through innovative web development, scalable software systems, and cutting-edge digital technologies.',
     'ኦቶፒክ ቴክኖሎጂስ ፒኤልሲ ፈጠራዊ ዌብ ልማት፣ ሊስፋፉ የሚችሉ ሶፍትዌር ሲስተሞች እና ዘመናዊ ዲጂታል ቴክኖሎጂዎች አማካኝነት ንግዶች እንዲያድጉ ይረዳል።'
 ); ?>
                 </p>
@@ -515,7 +515,7 @@ endif; ?>
         </h2>
         <p class="text-lg text-blue-100 mb-8 max-w-2xl mx-auto" data-animate="slide-up">
             <?php echo get_text(
-    'Let\'s discuss how Authopic Technologies can help your business grow with innovative web development, scalable software, and cutting-edge digital solutions.',
+    'Let\'s discuss how Melihik Technologies can help your business grow with innovative web development, scalable software, and cutting-edge digital solutions.',
     'ኦቶፒክ ቴክኖሎጂስ ፈጠራዊ ዌብ ልማት፣ ሊስፋፉ የሚችሉ ሶፍትዌር እና ዘመናዊ ዲጂታል መፍትሔዎች ንግድዎን ለማሳደግ እንዴት እንደሚረዱ እንነጋገር።'
 ); ?>
         </p>

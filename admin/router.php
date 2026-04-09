@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin Router
+ * Melihik Technologies PLC - Admin Router
  */
 if (!defined('BASE_PATH')) exit;
 

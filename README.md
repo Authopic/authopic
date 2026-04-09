@@ -1,6 +1,6 @@
-# Authopic Technologies PLC — Company Website
+# Melihik Technologies PLC — Company Website
 
-Full-stack dynamic website for **Authopic Technologies PLC**, a modern technology company based in Addis Ababa, Ethiopia. Built with procedural PHP, MySQL, Tailwind CSS, and vanilla JavaScript.
+Full-stack dynamic website for **Melihik Technologies PLC**, a modern technology company based in Addis Ababa, Ethiopia. Built with procedural PHP, MySQL, Tailwind CSS, and vanilla JavaScript.
 
 ---
 
@@ -46,14 +46,14 @@ Upload all files to your web server's document root or a subdirectory.
 ### 2. Create Database
 
 ```sql
-CREATE DATABASE authopic_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE Melihik_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 ### 3. Import Schema & Seed Data
 
 ```bash
-mysql -u root -p authopic_db < database/schema.sql
-mysql -u root -p authopic_db < database/seed.sql
+mysql -u root -p Melihik_db < database/schema.sql
+mysql -u root -p Melihik_db < database/seed.sql
 ```
 
 ### 4. Configure Database Connection
@@ -64,8 +64,8 @@ Edit `config/database.php`:
 define('DB_HOST', 'localhost');
 define('DB_USER', 'your_db_user');
 define('DB_PASS', 'your_db_password');
-define('DB_NAME', 'authopic_db');
-define('SITE_URL', 'https://authopic.com');
+define('DB_NAME', 'Melihik_db');
+define('SITE_URL', 'https://Melihik.com');
 ```
 
 ### 5. Set Permissions
@@ -223,4 +223,4 @@ chmod 644 .htaccess
 
 ## License
 
-Proprietary — Authopic Technologies PLC. All rights reserved.
+Proprietary — Melihik Technologies PLC. All rights reserved.

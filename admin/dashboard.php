@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Admin Dashboard (Mobile-First)
+ * Melihik Technologies PLC - Admin Dashboard (Mobile-First)
  */
 if (!defined('BASE_PATH')) exit;
 

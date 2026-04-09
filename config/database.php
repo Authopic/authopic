@@ -2,7 +2,7 @@
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
  * ============================================
- * Authopic Technologies PLC - Database Configuration
+ * Melihik Technologies PLC - Database Configuration
  * Loads settings from .env (local or production)
  * ============================================
  */
@@ -58,7 +58,7 @@ function env(string $key, $default = null) {
 // Database Credentials
 // ============================================
 define('DB_HOST',    env('DB_HOST', 'localhost'));
-define('DB_NAME',    env('DB_NAME', 'authopic_db'));
+define('DB_NAME',    env('DB_NAME', 'Melihik_db'));
 define('DB_USER',    env('DB_USER', 'root'));
 define('DB_PASS',    env('DB_PASS', ''));
 define('DB_CHARSET', 'utf8mb4');
@@ -66,8 +66,8 @@ define('DB_CHARSET', 'utf8mb4');
 // ============================================
 // Site Configuration
 // ============================================
-define('SITE_URL',     rtrim(env('SITE_URL', 'https://authopic.com'), '/'));
-define('SITE_NAME',    env('SITE_NAME', 'Authopic Technologies PLC'));
+define('SITE_URL',     rtrim(env('SITE_URL', 'https://Melihik.com'), '/'));
+define('SITE_NAME',    env('SITE_NAME', 'Melihik Technologies PLC'));
 define('SITE_VERSION', '1.0.0');
 
 // ============================================
@@ -81,7 +81,7 @@ define('ASSETS_URL',  SITE_URL . '/assets');
 // Session Configuration
 // ============================================
 define('SESSION_LIFETIME', 1800); // 30 minutes
-define('SESSION_NAME', env('SESSION_NAME', 'Authopic_SESSION'));
+define('SESSION_NAME', env('SESSION_NAME', 'Melihik_SESSION'));
 
 // ============================================
 // File Upload Limits
@@ -108,8 +108,8 @@ define('MAIL_PORT',       (int) env('MAIL_PORT', '587'));
 define('MAIL_ENCRYPTION', env('MAIL_ENCRYPTION', 'tls'));
 define('MAIL_USER',       env('MAIL_USER', ''));
 define('MAIL_PASS',       env('MAIL_PASS', ''));
-define('MAIL_FROM_NAME',  env('MAIL_FROM_NAME',  'Authopic Technologies PLC'));
-define('MAIL_FROM_EMAIL', env('MAIL_FROM_EMAIL', 'noreply@authopic.com'));
+define('MAIL_FROM_NAME',  env('MAIL_FROM_NAME',  'Melihik Technologies PLC'));
+define('MAIL_FROM_EMAIL', env('MAIL_FROM_EMAIL', 'noreply@Melihik.com'));
 
 // ============================================
 // Debug Mode (set APP_DEBUG=false in production)

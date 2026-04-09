@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Demo Requests Management
+ * Melihik Technologies PLC - Admin: Demo Requests Management
  */
 if (!defined('BASE_PATH')) exit;
 

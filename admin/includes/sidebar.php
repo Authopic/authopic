@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin Sidebar Navigation
+ * Melihik Technologies PLC - Admin Sidebar Navigation
  */
 if (!defined('BASE_PATH'))
     exit;
@@ -46,7 +46,7 @@ $sidebar_items = [
         <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <span class="text-white font-black text-sm">A</span>
         </div>
-        <span class="font-extrabold text-slate-800 dark:text-white">Authopic</span>
+        <span class="font-extrabold text-slate-800 dark:text-white">Melihik</span>
         <span class="font-extrabold text-primary text-sm">Admin</span>
     </div>
 

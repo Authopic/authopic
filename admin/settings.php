@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Site Settings
+ * Melihik Technologies PLC - Admin: Site Settings
  */
 if (!defined('BASE_PATH')) exit;
 
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && post('action') === 'test_email') {
         set_flash('error', 'Please enter a valid email address to send the test to.');
         redirect('/admin/settings');
     }
-    $site_name = get_setting('site_name', 'Authopic Technologies PLC');
+    $site_name = get_setting('site_name', 'Melihik Technologies PLC');
     $html = email_template('SMTP Test Email', "<p>This is a test email sent from <strong>$site_name</strong> admin panel.</p>"
         . "<p>If you received this, your SMTP configuration is working correctly.</p>"
         . "<p style='font-size:12px;color:#94a3b8;margin-top:16px;'>Sent: " . date('Y-m-d H:i:s') . " UTC</p>"

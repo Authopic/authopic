@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - API Router
+ * Melihik Technologies PLC - API Router
  * Handles AJAX form submissions
  */
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Leads Management
+ * Melihik Technologies PLC - Admin: Leads Management
  */
 if (!defined('BASE_PATH')) exit;
 

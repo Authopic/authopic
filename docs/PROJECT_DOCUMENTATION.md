@@ -1,10 +1,10 @@
-# Authopic Technologies PLC — Full Project Documentation
+# Melihik Technologies PLC — Full Project Documentation
 
 > **Document Version:** 1.0  
 > **Created:** February 27, 2026  
-> **Project Name:** Authopic Technologies PLC — Modern Digital Solutions  
+> **Project Name:** Melihik Technologies PLC — Modern Digital Solutions  
 > **Project Type:** Company Website + Content Management System (CMS)  
-> **Client:** Authopic Technologies PLC (Software Solutions Company — Addis Ababa, Ethiopia)  
+> **Client:** Melihik Technologies PLC (Software Solutions Company — Addis Ababa, Ethiopia)  
 > **Status:** Active Development
 
 ---
@@ -42,7 +42,7 @@
 
 ### 1.1 Description
 
-Authopic Technologies PLC is a full-stack company website and content management system for a modern technology company based in Addis Ababa, Ethiopia. The platform serves as both a public-facing marketing website and an internal CMS for managing content, leads, and business operations.
+Melihik Technologies PLC is a full-stack company website and content management system for a modern technology company based in Addis Ababa, Ethiopia. The platform serves as both a public-facing marketing website and an internal CMS for managing content, leads, and business operations.
 
 ### 1.2 Key Highlights
 
@@ -72,7 +72,7 @@ Authopic Technologies PLC is a full-stack company website and content management
 
 ### 2.1 Business Goals
 
-1. Establish a professional online presence for Authopic Technologies PLC
+1. Establish a professional online presence for Melihik Technologies PLC
 2. Showcase software products (SMS & ERP) with pricing and demo request flow
 3. Generate qualified leads through contact forms and demo scheduling
 4. Publish technical blog content to drive organic traffic
@@ -216,7 +216,7 @@ index.php (Front Controller)
 ## 5. File & Directory Structure
 
 ```
-AUTHOPIC_TECHNOLOGIES/
+Melihik_TECHNOLOGIES/
 │
 ├── index.php                    # Main entry point / front controller / router
 ├── manifest.json                # PWA Web App Manifest
@@ -1292,8 +1292,8 @@ Implementation: IP-based tracking in `rate_limits` table via `rate_limit_check()
 
 | Property | Value |
 |---|---|
-| `name` | Authopic Technologies PLC - Modern Digital Solutions |
-| `short_name` | Authopic Technologies |
+| `name` | Melihik Technologies PLC - Modern Digital Solutions |
+| `short_name` | Melihik Technologies |
 | `display` | standalone |
 | `theme_color` | #0066FF |
 | `background_color` | #0f172a |
@@ -1599,7 +1599,7 @@ Return relative file path
 
 - [ ] Set up Apache web server with PHP 8.0+
 - [ ] Install MySQL/MariaDB 8.0+
-- [ ] Configure virtual host (`authopic.com` or production domain)
+- [ ] Configure virtual host (`Melihik.com` or production domain)
 - [ ] Create `.htaccess` file with URL rewrite rules
 - [ ] Install Node.js and npm
 - [ ] Run `npm install` for Tailwind CSS
@@ -1914,8 +1914,8 @@ Header set Referrer-Policy "strict-origin-when-cross-origin"
 | `DB_NAME` | Database name | `dev_group` |
 | `DB_USER` | Database username | `root` |
 | `DB_PASS` | Database password | `0000` |
-| `SITE_URL` | Base URL | `https://authopic.com` |
-| `SITE_NAME` | Display name | `Authopic Technologies PLC` |
+| `SITE_URL` | Base URL | `https://Melihik.com` |
+| `SITE_NAME` | Display name | `Melihik Technologies PLC` |
 | `SITE_VERSION` | App version | `1.0.0` |
 | `BASE_PATH` | File system root path | `__DIR__ . '/..'` |
 | `UPLOAD_PATH` | Upload directory | `BASE_PATH . '/uploads'` |
@@ -2043,4 +2043,4 @@ Header set Referrer-Policy "strict-origin-when-cross-origin"
 
 ---
 
-*This document serves as the complete pre-development planning reference for the Authopic Technologies PLC project. All features, database schemas, file structures, and implementation details listed above should be developed and verified against this specification.*
+*This document serves as the complete pre-development planning reference for the Melihik Technologies PLC project. All features, database schemas, file structures, and implementation details listed above should be developed and verified against this specification.*

@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Product Single Page (/products/sms, /products/erp)
+ * Melihik Technologies PLC - Product Single Page (/products/sms, /products/erp)
  */
 if (!defined('BASE_PATH')) exit;
 

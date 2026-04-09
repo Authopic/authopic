@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Search Results Page
+ * Melihik Technologies PLC - Search Results Page
  */
 if (!defined('BASE_PATH')) exit;
 

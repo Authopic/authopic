@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Footer Template
+ * Melihik Technologies PLC - Footer Template
  */
 if (!defined('BASE_PATH'))
     exit;
@@ -30,7 +30,7 @@ $_footer_services = db_fetch_all("SELECT `name_en`, `name_am`, `slug` FROM `serv
                 <div class="lg:col-span-1">
                     <a href="<?php echo url('/'); ?>" class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-lg">A</div>
-                        <span class="text-xl font-bold text-primary">Authopic Technologies</span>
+                        <span class="text-xl font-bold text-primary">Melihik Technologies</span>
                     </a>
                     <p class="text-slate-500 dark:text-gray-400 text-sm leading-relaxed mb-6">
                         <?php echo get_text(
@@ -109,7 +109,7 @@ endif; ?>
                         </li>
                         <li class="flex items-center gap-3">
                             <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <a href="mailto:<?php echo e(get_setting('site_email')); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary transition-colors"><?php echo e(get_setting('site_email', 'info@authopic.com')); ?></a>
+                            <a href="mailto:<?php echo e(get_setting('site_email')); ?>" class="text-sm text-slate-500 dark:text-gray-400 hover:text-primary transition-colors"><?php echo e(get_setting('site_email', 'info@Melihik.com')); ?></a>
                         </li>
                         <li class="flex items-center gap-3">
                             <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -139,7 +139,7 @@ endif; ?>
             <!-- Bottom Bar -->
             <div class="border-t border-black/5 dark:border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-sm text-slate-400 dark:text-gray-400">
-                    &copy; <?php echo $year; ?> <?php echo e(get_setting('site_name', 'Authopic Technologies PLC')); ?>. <?php echo get_text('All rights reserved.', 'ሁሉም መብቶች የተጠበቁ ናቸው።'); ?>
+                    &copy; <?php echo $year; ?> <?php echo e(get_setting('site_name', 'Melihik Technologies PLC')); ?>. <?php echo get_text('All rights reserved.', 'ሁሉም መብቶች የተጠበቁ ናቸው።'); ?>
                 </p>
                 <div class="flex items-center gap-4 text-sm text-slate-400 dark:text-gray-400">
                     <a href="<?php echo url('/privacy'); ?>" class="hover:text-primary transition-colors"><?php echo get_text('Privacy Policy', 'የግላዊነት ፖሊሲ'); ?></a>
@@ -175,8 +175,8 @@ endif; ?>
                         <span class="text-white font-black text-xl">A</span>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white">Install Authopic Technologies</h3>
-                        <p class="text-sm text-slate-500 dark:text-gray-400">authopic.com</p>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-white">Install Melihik Technologies</h3>
+                        <p class="text-sm text-slate-500 dark:text-gray-400">Melihik.com</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 mb-5 p-3 bg-slate-50 dark:bg-white/5 rounded-xl">
@@ -202,7 +202,7 @@ endif; ?>
                         <span class="text-white font-black text-xl">A</span>
                     </div>
                     <div>
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white">Install Authopic Technologies</h3>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-white">Install Melihik Technologies</h3>
                         <p class="text-sm text-slate-500 dark:text-gray-400">Add to your home screen</p>
                     </div>
                 </div>

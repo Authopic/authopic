@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Pages Management
+ * Melihik Technologies PLC - Admin: Pages Management
  */
 if (!defined('BASE_PATH')) exit;
 

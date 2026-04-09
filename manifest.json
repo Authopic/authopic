@@ -1,6 +1,6 @@
 {
-    "name": "Authopic Technologies PLC - Digital Solutions",
-    "short_name": "Authopic",
+    "name": "Melihik Technologies PLC - Digital Solutions",
+    "short_name": "Melihik",
     "description": "Modern technology company providing web development, custom software, cloud solutions, and digital transformation services for businesses worldwide.",
     "start_url": "/",
     "scope": "/",
@@ -90,14 +90,14 @@
             "sizes": "1280x720",
             "type": "image/png",
             "form_factor": "wide",
-            "label": "Authopic Technologies Homepage - Desktop View"
+            "label": "Melihik Technologies Homepage - Desktop View"
         },
         {
             "src": "/assets/images/screenshots/mobile.png",
             "sizes": "750x1334",
             "type": "image/png",
             "form_factor": "narrow",
-            "label": "Authopic Technologies Mobile Experience"
+            "label": "Melihik Technologies Mobile Experience"
         }
     ],
     "shortcuts": [

@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Portfolio Page (/portfolio)
+ * Melihik Technologies PLC - Portfolio Page (/portfolio)
  */
 if (!defined('BASE_PATH')) exit;
 

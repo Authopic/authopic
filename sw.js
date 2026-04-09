@@ -1,10 +1,10 @@
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Service Worker v2.0
+ * Melihik Technologies PLC - Service Worker v2.0
  * Professional caching strategies, offline fallback, background sync
  */
 
-const CACHE_VERSION = 'Authopic-v2.0';
+const CACHE_VERSION = 'Melihik-v2.0';
 const STATIC_CACHE = CACHE_VERSION + '-static';
 const DYNAMIC_CACHE = CACHE_VERSION + '-dynamic';
 const IMAGE_CACHE = CACHE_VERSION + '-images';
@@ -58,7 +58,7 @@ self.addEventListener('activate', function(event) {
             return Promise.all(
                 cacheNames
                     .filter(function(name) {
-                        return name.startsWith('Authopic-') && 
+                        return name.startsWith('Melihik-') && 
                                name !== STATIC_CACHE && 
                                name !== DYNAMIC_CACHE && 
                                name !== IMAGE_CACHE &&
@@ -181,7 +181,7 @@ self.addEventListener('fetch', function(event) {
 // ---- PUSH NOTIFICATIONS (placeholder) ----
 self.addEventListener('push', function(event) {
     var data = event.data ? event.data.json() : {};
-    var title = data.title || 'Authopic Technologies PLC';
+    var title = data.title || 'Melihik Technologies PLC';
     var options = {
         body: data.body || 'You have a new notification',
         icon: '/assets/images/icons/icon-192x192.png',

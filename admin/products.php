@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Products Management
+ * Melihik Technologies PLC - Admin: Products Management
  */
 if (!defined('BASE_PATH'))
     exit;

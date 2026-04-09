@@ -2,7 +2,7 @@
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
  * ============================================
- * Authopic Technologies PLC - Main Router / Front Controller
+ * Melihik Technologies PLC - Main Router / Front Controller
  * All requests are routed through this file
  * ============================================
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin Login
+ * Melihik Technologies PLC - Admin Login
  */
 if (!defined('BASE_PATH'))
     exit;
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Admin Login - Authopic Technologies PLC</title>
+    <title>Admin Login - Melihik Technologies PLC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo asset('css/tailwind.css'); ?>">
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
                     <span class="text-white font-black text-lg">A</span>
                 </div>
-                <span class="text-slate-800 dark:text-white">Authopic</span>
+                <span class="text-slate-800 dark:text-white">Melihik</span>
                 <span class="text-primary">Technologies</span>
             </a>
             <p class="text-slate-500 dark:text-gray-400 mt-2">Admin Dashboard</p>

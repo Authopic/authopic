@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin Logout
+ * Melihik Technologies PLC - Admin Logout
  */
 if (!defined('BASE_PATH')) exit;
 

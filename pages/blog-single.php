@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Blog Single Page (/insights/{slug})
+ * Melihik Technologies PLC - Blog Single Page (/insights/{slug})
  */
 if (!defined('BASE_PATH')) exit;
 

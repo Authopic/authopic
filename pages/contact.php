@@ -1,12 +1,12 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Contact Page (/contact)
+ * Melihik Technologies PLC - Contact Page (/contact)
  */
 if (!defined('BASE_PATH')) exit;
 
 $page_title = get_text('Contact Us', 'ያግኙን');
-$page_description = get_text('Get in touch with Authopic Technologies PLC. We\'d love to hear from you.', 'አናኖምስ ዴቭን ያግኙ። ከእርስዎ ለመስማት እንፈልጋለን።');
+$page_description = get_text('Get in touch with Melihik Technologies PLC. We\'d love to hear from you.', 'አናኖምስ ዴቭን ያግኙ። ከእርስዎ ለመስማት እንፈልጋለን።');
 
 // Handle form submission
 $errors = [];

@@ -1,7 +1,7 @@
 // Developed by Yisak A. Alemayehu (yisak.dev)
 <?php
 /**
- * Authopic Technologies PLC - Admin: Testimonials Management
+ * Melihik Technologies PLC - Admin: Testimonials Management
  */
 if (!defined('BASE_PATH')) exit;
 

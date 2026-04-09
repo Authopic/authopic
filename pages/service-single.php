@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Service Single Page (/services/{slug})
+ * Melihik Technologies PLC - Service Single Page (/services/{slug})
  */
 if (!defined('BASE_PATH')) exit;
 

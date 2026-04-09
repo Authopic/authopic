@@ -1,13 +1,13 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Header Template
+ * Melihik Technologies PLC - Header Template
  * Included at the top of every public page
  */
 if (!defined('BASE_PATH'))
     exit;
 
-$page_title = isset($page_title) ? $page_title . ' | ' . get_setting('site_name', 'Authopic Technologies PLC') : get_setting('meta_title', 'Authopic Technologies PLC - Web Development & Software Solutions');
+$page_title = isset($page_title) ? $page_title . ' | ' . get_setting('site_name', 'Melihik Technologies PLC') : get_setting('meta_title', 'Melihik Technologies PLC - Web Development & Software Solutions');
 $page_description = $page_description ?? get_setting('meta_description', '');
 $page_image = $page_image ?? asset('images/og-image.jpg');
 $body_class = $body_class ?? '';
@@ -37,7 +37,7 @@ unset($_nav_item);
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="<?php echo e($page_description); ?>">
     <meta name="keywords" content="<?php echo e(get_setting('meta_keywords', '')); ?>">
-    <meta name="author" content="Authopic Technologies PLC">
+    <meta name="author" content="Melihik Technologies PLC">
     
     <!-- Open Graph -->
     <meta property="og:title" content="<?php echo e($page_title); ?>">
@@ -95,7 +95,7 @@ unset($_nav_item);
                         A
                     </div>
                     <span class="text-xl font-bold text-primary hidden sm:inline">
-                        Authopic Technologies
+                        Melihik Technologies
                     </span>
                 </a>
                 

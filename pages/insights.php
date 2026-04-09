@@ -1,12 +1,12 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Insights / Blog Listing Page (/insights)
+ * Melihik Technologies PLC - Insights / Blog Listing Page (/insights)
  */
 if (!defined('BASE_PATH')) exit;
 
 $page_title = get_text('Insights & Blog', 'ግንዛቤዎች እና ብሎግ');
-$page_description = get_text('Tech insights, tips, and updates from the Authopic Technologies PLC team.', 'ከአናኖምስ ዴቭ ቡድን የቴክ ግንዛቤዎች፣ ምክሮች እና ዝመናዎች።');
+$page_description = get_text('Tech insights, tips, and updates from the Melihik Technologies PLC team.', 'ከአናኖምስ ዴቭ ቡድን የቴክ ግንዛቤዎች፣ ምክሮች እና ዝመናዎች።');
 
 // Filters
 $filter_category = get('category', '');

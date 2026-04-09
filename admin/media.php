@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Media Library
+ * Melihik Technologies PLC - Admin: Media Library
  */
 if (!defined('BASE_PATH')) exit;
 

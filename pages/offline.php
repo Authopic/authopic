@@ -1,7 +1,7 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Offline Page (PWA fallback)
+ * Melihik Technologies PLC - Offline Page (PWA fallback)
  */
 if (!defined('BASE_PATH')) exit;
 $page_title = get_text('You\'re Offline', 'ከመስመር ውጭ ነዎት');
@@ -11,7 +11,7 @@ $page_title = get_text('You\'re Offline', 'ከመስመር ውጭ ነዎት');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo e($page_title); ?> - Authopic Technologies PLC</title>
+    <title><?php echo e($page_title); ?> - Melihik Technologies PLC</title>
     <link rel="stylesheet" href="/assets/css/tailwind.css">
     <style>
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }

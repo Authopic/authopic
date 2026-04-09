@@ -3,16 +3,16 @@
 -- Default Admin User (password: Admin@2026!)
 -- ============================================
 INSERT INTO `admin_users` (`username`, `email`, `password_hash`, `full_name`, `role`, `is_active`) VALUES
-('admin', 'admin@authopic.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator', 'admin', 1),
-('editor', 'editor@authopic.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Content Editor', 'editor', 1);
+('admin', 'admin@Melihik.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator', 'admin', 1),
+('editor', 'editor@Melihik.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Content Editor', 'editor', 1);
 
 -- ============================================
 -- Site Settings
 -- ============================================
 INSERT INTO `site_settings` (`setting_key`, `setting_value`, `setting_type`, `setting_group`, `label`) VALUES
-('site_name', 'Authopic Technologies PLC', 'text', 'general', 'Site Name'),
+('site_name', 'Melihik Technologies PLC', 'text', 'general', 'Site Name'),
 ('site_tagline', 'Modern Digital Solutions', 'text', 'general', 'Site Tagline'),
-('site_email', 'info@authopic.com', 'email', 'general', 'Contact Email'),
+('site_email', 'info@Melihik.com', 'email', 'general', 'Contact Email'),
 ('site_phone', '+251-904-455302', 'text', 'general', 'Phone Number'),
 ('site_phone2', '+251-922-654321', 'text', 'general', 'Secondary Phone'),
 ('site_address', 'Bole Road, Addis Ababa, Ethiopia', 'text', 'general', 'Office Address'),
@@ -21,13 +21,13 @@ INSERT INTO `site_settings` (`setting_key`, `setting_value`, `setting_type`, `se
 ('site_logo', '/assets/images/logo.png', 'image', 'general', 'Site Logo'),
 ('site_logo_light', '/assets/images/logo-light.png', 'image', 'general', 'Site Logo (Light)'),
 ('site_favicon', '/assets/images/favicon.ico', 'image', 'general', 'Favicon'),
-('social_linkedin', 'https://linkedin.com/company/authopic-technologies', 'url', 'social', 'LinkedIn'),
-('social_telegram', 'https://t.me/authopic_tech', 'url', 'social', 'Telegram'),
+('social_linkedin', 'https://linkedin.com/company/Melihik-technologies', 'url', 'social', 'LinkedIn'),
+('social_telegram', 'https://t.me/Melihik_tech', 'url', 'social', 'Telegram'),
 ('social_whatsapp', '+251911123456', 'text', 'social', 'WhatsApp Number'),
-('social_facebook', 'https://facebook.com/authopic.comnologies', 'url', 'social', 'Facebook'),
-('social_twitter', 'https://twitter.com/authopic_tech', 'url', 'social', 'Twitter/X'),
+('social_facebook', 'https://facebook.com/Melihik.comnologies', 'url', 'social', 'Facebook'),
+('social_twitter', 'https://twitter.com/Melihik_tech', 'url', 'social', 'Twitter/X'),
 ('social_youtube', '', 'url', 'social', 'YouTube'),
-('meta_title', 'Authopic Technologies PLC - Modern Digital Solutions', 'text', 'seo', 'Default Meta Title'),
+('meta_title', 'Melihik Technologies PLC - Modern Digital Solutions', 'text', 'seo', 'Default Meta Title'),
 ('meta_description', 'Leading software development company in Addis Ababa, Ethiopia. School Management Systems, ERP Solutions, and Custom Web Development.', 'textarea', 'seo', 'Default Meta Description'),
 ('meta_keywords', 'software company ethiopia, school management system, erp ethiopia, web development addis ababa', 'textarea', 'seo', 'Default Meta Keywords'),
 ('google_analytics', '', 'text', 'seo', 'Google Analytics ID'),
@@ -36,8 +36,8 @@ INSERT INTO `site_settings` (`setting_key`, `setting_value`, `setting_type`, `se
 ('smtp_username', '', 'text', 'email', 'SMTP Username'),
 ('smtp_password', '', 'text', 'email', 'SMTP Password'),
 ('smtp_encryption', 'tls', 'text', 'email', 'SMTP Encryption'),
-('smtp_from_name', 'Authopic Technologies PLC', 'text', 'email', 'From Name'),
-('smtp_from_email', 'noreply@authopic.com', 'email', 'email', 'From Email'),
+('smtp_from_name', 'Melihik Technologies PLC', 'text', 'email', 'From Name'),
+('smtp_from_email', 'noreply@Melihik.com', 'email', 'email', 'From Email'),
 ('office_hours_weekday', '8:30 AM - 5:30 PM', 'text', 'general', 'Weekday Hours'),
 ('office_hours_saturday', '9:00 AM - 1:00 PM', 'text', 'general', 'Saturday Hours'),
 ('office_hours_sunday', 'Closed', 'text', 'general', 'Sunday Hours'),
@@ -247,10 +247,10 @@ INSERT INTO `team_members` (`name_en`, `name_am`, `position_en`, `position_am`, 
 -- Testimonials
 -- ============================================
 INSERT INTO `testimonials` (`client_name`, `client_position`, `company_name`, `quote_en`, `rating`, `is_featured`, `status`, `related_product`, `sort_order`) VALUES
-('Ato Tesfaye Mekonnen', 'School Director', 'Brightstar International Academy', 'Authopic Technologies transformed how we manage our school. The School Management System saved us countless hours and parents love the portal. Our administrative staff went from drowning in paperwork to having time for what matters — education.', 5, 1, 'approved', 'sms', 1),
-('W/ro Almaz Gebre', 'Operations Manager', 'Abyssinia Trading PLC', 'The ERP system from Authopic Technologies has been a game-changer for our business. Inventory accuracy went from 72% to 98%, and our monthly financial closing now takes just one day instead of five. The return on investment was clear within months.', 5, 1, 'approved', 'erp', 2),
+('Ato Tesfaye Mekonnen', 'School Director', 'Brightstar International Academy', 'Melihik Technologies transformed how we manage our school. The School Management System saved us countless hours and parents love the portal. Our administrative staff went from drowning in paperwork to having time for what matters — education.', 5, 1, 'approved', 'sms', 1),
+('W/ro Almaz Gebre', 'Operations Manager', 'Abyssinia Trading PLC', 'The ERP system from Melihik Technologies has been a game-changer for our business. Inventory accuracy went from 72% to 98%, and our monthly financial closing now takes just one day instead of five. The return on investment was clear within months.', 5, 1, 'approved', 'erp', 2),
 ('Dr. Kidane Woldemariam', 'CEO', 'Hope Medical Center', 'Our new website has dramatically increased our online visibility. We now receive 40% of appointments through online booking, and the bilingual support has been invaluable for serving all our patients effectively.', 5, 1, 'approved', 'website', 3),
-('Ato Bereket Solomon', 'General Manager', 'Unity Manufacturing', 'Working with Authopic Technologies was a pleasure from start to finish. They understood our unique needs as an Ethiopian manufacturer and delivered an ERP system that truly fits our operations. Highly recommended.', 5, 0, 'approved', 'erp', 4),
+('Ato Bereket Solomon', 'General Manager', 'Unity Manufacturing', 'Working with Melihik Technologies was a pleasure from start to finish. They understood our unique needs as an Ethiopian manufacturer and delivered an ERP system that truly fits our operations. Highly recommended.', 5, 0, 'approved', 'erp', 4),
 ('W/ro Tigist Ayele', 'Principal', 'Sunshine Academy', 'The SMS system has brought our school into the digital age. Teachers find it easy to use, and the Amharic language support means everyone on our team can use it comfortably. A truly local solution.', 4, 0, 'approved', 'sms', 5);
 
 COMMIT;

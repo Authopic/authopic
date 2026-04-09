@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin Header / Layout Top
+ * Melihik Technologies PLC - Admin Header / Layout Top
  */
 if (!defined('BASE_PATH'))
     exit;
@@ -16,7 +16,7 @@ $admin_page = isset($admin_page) ? $admin_page : 'dashboard';
     <meta name="theme-color" content="#074DD9">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Admin - <?php echo ucfirst($admin_page); ?> | Authopic Technologies PLC</title>
+    <title>Admin - <?php echo ucfirst($admin_page); ?> | Melihik Technologies PLC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo asset('css/tailwind.css'); ?>">

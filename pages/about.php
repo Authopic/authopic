@@ -1,13 +1,13 @@
 <?php
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - About Page (/about)
+ * Melihik Technologies PLC - About Page (/about)
  */
 if (!defined('BASE_PATH'))
     exit;
 
 $page_title = get_text('About Us', 'ስለ እኛ');
-$page_description = get_text('Learn about Authopic Technologies PLC - a leading software solutions company in Addis Ababa, Ethiopia.', 'ስለ ኦቶፒክ ቴክኖሎጂስ ፒኤልሲ - በአዲስ አበባ፣ ኢትዮጵያ ውስጥ ግንባር ቀደም የሶፍትዌር መፍትሄዎች ኩባንያ ይወቁ።');
+$page_description = get_text('Learn about Melihik Technologies PLC - a leading software solutions company in Addis Ababa, Ethiopia.', 'ስለ ኦቶፒክ ቴክኖሎጂስ ፒኤልሲ - በአዲስ አበባ፣ ኢትዮጵያ ውስጥ ግንባር ቀደም የሶፍትዌር መፍትሄዎች ኩባንያ ይወቁ።');
 
 // Team members
 $team = db_fetch_all("SELECT * FROM `team_members` WHERE `is_active` = 1 ORDER BY `sort_order` ASC");
@@ -29,7 +29,7 @@ require_once BASE_PATH . '/includes/header.php';
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center" data-animate="slide-up">
             <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-sm text-primary font-medium mb-6">
-                <?php echo get_text('About Authopic Technologies', 'ስለ ኦቶፒክ ቴክኖሎጂስ'); ?>
+                <?php echo get_text('About Melihik Technologies', 'ስለ ኦቶፒክ ቴክኖሎጂስ'); ?>
             </span>
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-800 dark:text-white mb-6 leading-tight">
                 <?php echo get_text('Powering Digital Transformation Through Innovation', 'በፈጠራ አማካኝነት ዲጂታል ለውጥን እንጋገራለን'); ?>
@@ -112,7 +112,7 @@ endforeach; ?>
             
             <?php
 $milestones = [
-    ['year' => '2023', 'title_en' => 'Founded', 'title_am' => 'ተመሠረተ', 'desc_en' => 'Authopic Technologies PLC was founded in Addis Ababa with a vision to transform Ethiopian education through technology.', 'desc_am' => 'ኦቶፒክ ቴክኖሎጂስ ፒኤልሲ በአዲስ አበባ ተቋቋመ።'],
+    ['year' => '2023', 'title_en' => 'Founded', 'title_am' => 'ተመሠረተ', 'desc_en' => 'Melihik Technologies PLC was founded in Addis Ababa with a vision to transform Ethiopian education through technology.', 'desc_am' => 'ኦቶፒክ ቴክኖሎጂስ ፒኤልሲ በአዲስ አበባ ተቋቋመ።'],
     ['year' => '2023', 'title_en' => 'First SMS Client', 'title_am' => 'የመጀመሪያ SMS ደንበኛ', 'desc_en' => 'Deployed our School Management System to the first school, beginning our journey of empowering Ethiopian schools.', 'desc_am' => 'የመጀመሪያውን ትምህርት ቤት አስተዳደር ስርዓት ለትምህርት ቤት ተሰማራ።'],
     ['year' => '2024', 'title_en' => 'ERP Launch', 'title_am' => 'ERP ተጀመረ', 'desc_en' => 'Expanded into Enterprise Resource Planning, serving manufacturing, trading, and NGO sectors.', 'desc_am' => 'ወደ ኢንተርፕራይዝ ሪሶርስ ፕላኒንግ ተስፋፋ።'],
     ['year' => '2025', 'title_en' => 'Web Services', 'title_am' => 'ዌብ አገልግሎቶች', 'desc_en' => 'Added website and web application development services to our portfolio.', 'desc_am' => 'ድህረ ገጽ እና ዌብ አፕሊኬሽን ልማት አገልግሎቶችን ጨመረ።'],
@@ -164,7 +164,7 @@ endforeach; ?>
         <div class="text-center max-w-3xl mx-auto mb-16" data-animate="slide-up">
             <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white mb-4"><?php echo get_text('Meet Our Team', 'ቡድናችንን ይወቁ'); ?></h2>
             <p class="text-lg text-slate-500 dark:text-gray-400">
-                <?php echo get_text('The talented people behind Authopic Technologies PLC.', 'ከአናኖምስ ዴቭ ጀርባ ያሉ ተሰጥኦ ያላቸው ሰዎች።'); ?>
+                <?php echo get_text('The talented people behind Melihik Technologies PLC.', 'ከአናኖምስ ዴቭ ጀርባ ያሉ ተሰጥኦ ያላቸው ሰዎች።'); ?>
             </p>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -1,5 +1,5 @@
 -- ============================================
--- Authopic Technologies PLC - Complete Database Schema
+-- Melihik Technologies PLC - Complete Database Schema
 -- Version: 1.0.0
 -- Compatible with MySQL 5.7+ / MariaDB 10.3+
 -- ============================================

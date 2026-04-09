@@ -1,6 +1,6 @@
 <?php
 /**
- * Authopic Technologies PLC - Admin: Analytics Dashboard
+ * Melihik Technologies PLC - Admin: Analytics Dashboard
  */
 if (!defined('BASE_PATH')) exit;
 

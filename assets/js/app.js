@@ -1,6 +1,6 @@
 // Developed by Yisak A. Alemayehu (yisak.dev)
 /**
- * Authopic Technologies PLC - Main JavaScript
+ * Melihik Technologies PLC - Main JavaScript
  * Vanilla JS only - No frameworks
  */
 
